@@ -29,14 +29,14 @@ function showSalesForm() {
 }
 
 function getCaptadores() {
-    const ss = SpreadsheetApp.openById('1aTA1niEFGq6SMUSVUGVuo76sJOwh_-uIv9ARxmjkS0I');
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
     const sheet = ss.getSheetByName('Dim_Corretor');
     const data = sheet.getRange('A2:C' + sheet.getLastRow()).getValues();
     return data.map(row => ({ IdCorretor: row[0], Nome: row[1], IdGerente: row[2] }));
 }
 
 function getManager(idCorretor) {
-    const ss = SpreadsheetApp.openById('1aTA1niEFGq6SMUSVUGVuo76sJOwh_-uIv9ARxmjkS0I');
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
     const sheet = ss.getSheetByName('Dim_Corretor');
     const data = sheet.getRange('A2:C' + sheet.getLastRow()).getValues();
     const manager = data.find(row => row[0] === idCorretor);
@@ -44,14 +44,14 @@ function getManager(idCorretor) {
 }
 
 function getBairros() {
-    const ss = SpreadsheetApp.openById('1aTA1niEFGq6SMUSVUGVuo76sJOwh_-uIv9ARxmjkS0I');
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
     const sheet = ss.getSheetByName('Dim_Imovel');
     const bairros = sheet.getRange('D2:D' + sheet.getLastRow()).getValues();
     return [...new Set(bairros.map(row => row[0]).filter(Boolean))];
 }
 
 function getCorretoresComGerentes() {
-    const ss = SpreadsheetApp.openById('1aTA1niEFGq6SMUSVUGVuo76sJOwh_-uIv9ARxmjkS0I');
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
     const sheetCorretores = ss.getSheetByName('Dim_Corretor');
     const sheetGerentes = ss.getSheetByName('Dim_Gerente');
     
@@ -96,8 +96,9 @@ function populateDropdown(elementId, options) {
     });
 }
 
+
 function submitSalesData(data) {
-    const ss = SpreadsheetApp.openById('1aTA1niEFGq6SMUSVUGVuo76sJOwh_-uIv9ARxmjkS0I');
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
     const sheetVendas = ss.getSheetByName('Fato_Venda');
     const sheetImovel = ss.getSheetByName('Dim_Imovel');
 
