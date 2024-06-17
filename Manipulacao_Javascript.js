@@ -63,7 +63,7 @@ function getCorretoresComGerentes() {
         id: corretor[0],
         nome: corretor[1],
         idGerente: corretor[2],
-        nomeGerente: gerentesMap.get(corretor[2]) // Adiciona o nome do gerente aqui
+        nomeGerente: gerentesMap.get(corretor[2])
     }));
 }
 
