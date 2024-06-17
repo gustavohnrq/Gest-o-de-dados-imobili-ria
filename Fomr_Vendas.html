@@ -90,7 +90,7 @@
         </div>
         <div>
             <label for="vendedor1">Vendedor 1:</label>
-            <select id="vendedor1" name="vendedor1" required></select>
+            <select id="vendedor1" name="vendedor1" required onchange="updateManagerSelect('vendedor1', data)"></select>
         </div>
         <div>
             <label for="imobiliaria">Imobiliária:</label>
@@ -110,7 +110,7 @@
         </div>
         <div>
             <label for="vendedor2">Vendedor 2:</label>
-            <select id="vendedor2" name="vendedor2"></select> <!-- Opcional, pode não ser preenchido -->
+            <select id="vendedor2" name="vendedor2" onchange="updateManagerSelect('vendedor2', data)"></select>
         </div>
         <div>
             <label for="porcentagemVendedor2">% Vendedor 2:</label>
@@ -118,7 +118,7 @@
         </div>
         <div>
             <label for="gerenteVenda2">Gerente de Venda 2:</label>
-            <select id="gerenteVenda2" name="gerenteVenda2"></select> <!-- Opcional, pode não ser preenchido -->
+            <select id="gerenteVenda2" name="gerenteVenda2"></select>
         </div>
         <div>
             <label for="porcentagemGerenteVenda2">% Gerente de Venda 2:</label>
@@ -126,7 +126,7 @@
         </div>
         <div>
             <label for="captador1">Captador 1:</label>
-            <select id="captador1" name="captador1" required></select>
+            <select id="captador1" name="captador1" required onchange="updateManagerSelect('captador1', data)"></select>
         </div>
         <div>
             <label for="porcentagemCaptador1">% Captador 1:</label>
@@ -142,7 +142,7 @@
         </div>
         <div>
             <label for="captador2">Captador 2:</label>
-            <select id="captador2" name="captador2"></select> <!-- Opcional, pode não ser preenchido -->
+            <select id="captador2" name="captador2" onchange="updateManagerSelect('captador2', data)"></select>
         </div>
         <div>
             <label for="porcentagemCaptador2">% Captador 2:</label>
@@ -150,7 +150,7 @@
         </div>
         <div>
             <label for="gerenteCaptacao2">Gerente de Captação 2:</label>
-            <select id="gerenteCaptacao2" name="gerenteCaptacao2"></select> <!-- Opcional, pode não ser preenchido -->
+            <select id="gerenteCaptacao2" name="gerenteCaptacao2"></select>
         </div>
         <div>
             <label for="porcentagemGerenteCaptacao2">% Gerente de Captação 2:</label>
@@ -174,15 +174,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function buildDropdowns(data) {
     populateDropdown('vendedor1', data, 'Selecionar Corretor');
-    populateDropdown('vendedor2', data, 'Selecionar Corretor'); // Opcional
+    populateDropdown('vendedor2', data, 'Selecionar Corretor');
     populateDropdown('captador1', data, 'Selecionar Corretor');
-    populateDropdown('captador2', data, 'Selecionar Corretor'); // Opcional
+    populateDropdown('captador2', data, 'Selecionar Corretor');
 
-    // Adicionando listeners de evento onblur para campos relevantes
-    document.getElementById('vendedor1').onblur = () => updateManagerSelect('vendedor1', data);
-    document.getElementById('vendedor2').onblur = () => updateManagerSelect('vendedor2', data);
-    document.getElementById('captador1').onblur = () => updateManagerSelect('captador1', data);
-    document.getElementById('captador2').onblur = () => updateManagerSelect('captador2', data);
+    document.getElementById('vendedor1').onchange = () => updateManagerSelect('vendedor1', data);
+    document.getElementById('vendedor2').onchange = () => updateManagerSelect('vendedor2', data);
+    document.getElementById('captador1').onchange = () => updateManagerSelect('captador1', data);
+    document.getElementById('captador2').onchange = () => updateManagerSelect('captador2', data);
 }
 
 function populateDropdown(elementId, options, placeholder = 'Selecionar') {
@@ -190,8 +189,8 @@ function populateDropdown(elementId, options, placeholder = 'Selecionar') {
     select.innerHTML = `<option value="">${placeholder}</option>`;
     options.forEach(option => {
         const opt = document.createElement('option');
-        opt.value = option.id; // Usando ID
-        opt.textContent = option.nome; // Mostrando nome
+        opt.value = option.id;
+        opt.textContent = option.nome;
         select.appendChild(opt);
     });
 }
@@ -207,16 +206,15 @@ function updateManagerSelect(corretorId, allData) {
     const managerData = allData.find(item => item.id === selectedCorretor);
     if (managerData && managerData.nomeGerente) {
         const opt = document.createElement('option');
-        opt.value = managerData.idGerente; // Usando ID do gerente
-        opt.textContent = managerData.nomeGerente; // Mostrando nome do gerente
+        opt.value = managerData.idGerente;
+        opt.textContent = managerData.nomeGerente;
         managerSelect.appendChild(opt);
-        managerSelect.value = managerData.idGerente; // Pré-selecionando o gerente
+        managerSelect.value = managerData.idGerente;
     }
 }
 
 function submitForm() {
     const form = document.getElementById('formVendas');
-    const isFocoChecked = form.focoPP.checked || form.focoAC.checked;
     google.script.run.withSuccessHandler(function(response) {
         alert('Formulário enviado com sucesso!');
         form.reset();
