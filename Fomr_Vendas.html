@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registro de Vendas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        h1 {
+            color: #007BFF;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        div {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="date"], input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Registro de Vendas</h1>
+    <form id="formVendas">
+        <div>
+            <label for="san">SAN:</label>
+            <input type="text" id="san" name="san" required>
+        </div>
+        <div>
+            <label for="dataVenda">Data da Venda:</label>
+            <input type="date" id="dataVenda" name="dataVenda" required>
+        </div>
+        <div>
+            <label for="bairro">Bairro:</label>
+            <input type="text" id="bairro" name="bairro" required>
+        </div>
+        <div>
+            <label for="quadra">Quadra:</label>
+            <input type="text" id="quadra" name="quadra" required>
+        </div>
+        <div>
+            <label for="tipo">Tipo:</label>
+            <input type="text" id="tipo" name="tipo" required>
+        </div>
+        <div>
+            <label for="focoPP">Foco PP:</label>
+            <input type="checkbox" id="focoPP" name="focoPP">
+        </div>
+        <div>
+            <label for="focoAC">Foco AC:</label>
+            <input type="checkbox" id="focoAC" name="focoAC">
+        </div>
+        <div>
+            <label for="valorNegocio">Valor do Negócio:</label>
+            <input type="number" id="valorNegocio" name="valorNegocio" required step="0.01">
+        </div>
+        <div>
+            <label for="valorComissao">Valor da Comissão:</label>
+            <input type="number" id="valorComissao" name="valorComissao" required step="0.01">
+        </div>
+        <div>
+            <label for="valorTotal61">Valor Total 61:</label>
+            <input type="number" id="valorTotal61" name="valorTotal61" required step="0.01">
+        </div>
+        <div>
+            <label for="vendedor1">Vendedor 1:</label>
+            <select id="vendedor1" name="vendedor1" required></select>
+        </div>
+        <div>
+            <label for="imobiliaria">Imobiliária:</label>
+            <select id="imobiliaria" name="imobiliaria" required></select>
+        </div>
+        <div>
+            <label for="porcentagemVendedor1">% Vendedor 1:</label>
+            <input type="number" id="porcentagemVendedor1" name="porcentagemVendedor1" required step="0.01">
+        </div>
+        <div>
+            <label for="gerenteVenda1">Gerente de Venda 1:</label>
+            <select id="gerenteVenda1" name="gerenteVenda1" required></select>
+        </div>
+        <div>
+            <label for="porcentagemGerenteVenda1">% Gerente de Venda 1:</label>
+            <input type="number" id="porcentagemGerenteVenda1" name="porcentagemGerenteVenda1" required step="0.01">
+        </div>
+        <div>
+            <label for="vendedor2">Vendedor 2:</label>
+            <select id="vendedor2" name="vendedor2"></select> <!-- Opcional, pode não ser preenchido -->
+        </div>
+        <div>
+            <label for="porcentagemVendedor2">% Vendedor 2:</label>
+            <input type="number" id="porcentagemVendedor2" name="porcentagemVendedor2" step="0.01">
+        </div>
+        <div>
+            <label for="gerenteVenda2">Gerente de Venda 2:</label>
+            <select id="gerenteVenda2" name="gerenteVenda2"></select> <!-- Opcional, pode não ser preenchido -->
+        </div>
+        <div>
+            <label for="porcentagemGerenteVenda2">% Gerente de Venda 2:</label>
+            <input type="number" id="porcentagemGerenteVenda2" name="porcentagemGerenteVenda2" step="0.01">
+        </div>
+        <div>
+            <label for="captador1">Captador 1:</label>
+            <select id="captador1" name="captador1" required></select>
+        </div>
+        <div>
+            <label for="porcentagemCaptador1">% Captador 1:</label>
+            <input type="number" id="porcentagemCaptador1" name="porcentagemCaptador1" required step="0.01">
+        </div>
+        <div>
+            <label for="gerenteCaptacao1">Gerente de Captação 1:</label>
+            <select id="gerenteCaptacao1" name="gerenteCaptacao1" required></select>
+        </div>
+        <div>
+            <label for="porcentagemGerenteCaptacao1">% Gerente de Captação 1:</label>
+            <input type="number" id="porcentagemGerenteCaptacao1" name="porcentagemGerenteCaptacao1" required step="0.01">
+        </div>
+        <div>
+            <label for="captador2">Captador 2:</label>
+            <select id="captador2" name="captador2"></select> <!-- Opcional, pode não ser preenchido -->
+        </div>
+        <div>
+            <label for="porcentagemCaptador2">% Captador 2:</label>
+            <input type="number" id="porcentagemCaptador2" name="porcentagemCaptador2" step="0.01">
+        </div>
+        <div>
+            <label for="gerenteCaptacao2">Gerente de Captação 2:</label>
+            <select id="gerenteCaptacao2" name="gerenteCaptacao2"></select> <!-- Opcional, pode não ser preenchido -->
+        </div>
+        <div>
+            <label for="porcentagemGerenteCaptacao2">% Gerente de Captação 2:</label>
+            <input type="number" id="porcentagemGerenteCaptacao2" name="porcentagemGerenteCaptacao2" step="0.01">
+        </div>
+        <div>
+            <label for="origemLeadVenda">Origem do Lead da Venda:</label>
+            <input type="text" id="origemLeadVenda" name="origemLeadVenda" required>
+        </div>
+        <div>
+            <label for="entradaLead">Entrada do Lead:</label>
+            <input type="date" id="entradaLead" name="entradaLead" required>
+        </div>
+        <button type="button" onclick="submitForm()">Enviar</button>
+    </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    google.script.run.withSuccessHandler(buildDropdowns).getCorretoresComGerentes();
+});
+
+function buildDropdowns(data) {
+    populateDropdown('vendedor1', data, 'Selecionar Corretor');
+    populateDropdown('vendedor2', data, 'Selecionar Corretor'); // Opcional
+    populateDropdown('captador1', data, 'Selecionar Corretor');
+    populateDropdown('captador2', data, 'Selecionar Corretor'); // Opcional
+
+    // Adicionando listeners de evento onblur para campos relevantes
+    document.getElementById('vendedor1').onblur = () => updateManagerSelect('vendedor1', data);
+    document.getElementById('vendedor2').onblur = () => updateManagerSelect('vendedor2', data);
+    document.getElementById('captador1').onblur = () => updateManagerSelect('captador1', data);
+    document.getElementById('captador2').onblur = () => updateManagerSelect('captador2', data);
+}
+
+function populateDropdown(elementId, options, placeholder = 'Selecionar') {
+    const select = document.getElementById(elementId);
+    select.innerHTML = `<option value="">${placeholder}</option>`;
+    options.forEach(option => {
+        const opt = document.createElement('option');
+        opt.value = option.id; // Usando ID
+        opt.textContent = option.nome; // Mostrando nome
+        select.appendChild(opt);
+    });
+}
+
+function updateManagerSelect(corretorId, allData) {
+    const selectedCorretor = document.getElementById(corretorId).value;
+    const managerSelectId = corretorId.includes('vendedor') ?
+                            corretorId.replace('vendedor', 'gerenteVenda') :
+                            corretorId.replace('captador', 'gerenteCaptacao');
+    const managerSelect = document.getElementById(managerSelectId);
+    managerSelect.innerHTML = '<option value="">Selecionar Gerente</option>';
+
+    const managerData = allData.find(item => item.id === selectedCorretor);
+    if (managerData && managerData.nomeGerente) {
+        const opt = document.createElement('option');
+        opt.value = managerData.idGerente; // Usando ID do gerente
+        opt.textContent = managerData.nomeGerente; // Mostrando nome do gerente
+        managerSelect.appendChild(opt);
+        managerSelect.value = managerData.idGerente; // Pré-selecionando o gerente
+    }
+}
+
+function submitForm() {
+    const form = document.getElementById('formVendas');
+    const isFocoChecked = form.focoPP.checked || form.focoAC.checked;
+    google.script.run.withSuccessHandler(function(response) {
+        alert('Formulário enviado com sucesso!');
+        form.reset();
+    }).withFailureHandler(function(error) {
+        alert('Erro ao enviar formulário: ' + error);
+    }).submitSalesData({
+        san: form.san.value,
+        dataVenda: form.dataVenda.value,
+        bairro: form.bairro.value,
+        quadra: form.quadra.value,
+        tipo: form.tipo.value,
+        focoPP: form.focoPP.checked ? 'TRUE' : 'FALSE',
+        focoAC: form.focoAC.checked ? 'TRUE' : 'FALSE',
+        valorNegocio: parseFloat(form.valorNegocio.value),
+        valorComissao: parseFloat(form.valorComissao.value),
+        valorTotal61: parseFloat(form.valorTotal61.value),
+        vendedor1: form.vendedor1.value,
+        imobiliaria: form.imobiliaria.value,
+        porcentagemVendedor1: parseFloat(form.porcentagemVendedor1.value),
+        gerenteVenda1: form.gerenteVenda1.value,
+        porcentagemGerenteVenda1: parseFloat(form.porcentagemGerenteVenda1.value),
+        vendedor2: form.vendedor2.value,
+        porcentagemVendedor2: parseFloat(form.porcentagemVendedor2.value),
+        gerenteVenda2: form.gerenteVenda2.value,
+        porcentagemGerenteVenda2: parseFloat(form.porcentagemGerenteVenda2.value),
+        captador1: form.captador1.value,
+        porcentagemCaptador1: parseFloat(form.porcentagemCaptador1.value),
+        gerenteCaptacao1: form.gerenteCaptacao1.value,
+        porcentagemGerenteCaptacao1: parseFloat(form.porcentagemGerenteCaptacao1.value),
+        captador2: form.captador2.value,
+        porcentagemCaptador2: parseFloat(form.porcentagemCaptador2.value),
+        gerenteCaptacao2: form.gerenteCaptacao2.value,
+        porcentagemGerenteCaptacao2: parseFloat(form.porcentagemGerenteCaptacao2.value),
+        origemLeadVenda: form.origemLeadVenda.value,
+        entradaLead: form.entradaLead.value
+    });
+}
+</script>
+</body>
+</html>

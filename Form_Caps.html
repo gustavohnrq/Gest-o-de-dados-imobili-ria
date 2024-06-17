@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registro de Captações</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        h1 {
+            color: #007BFF;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        div {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"], input[type="date"], input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Registro de Captações</h1>
+    <form id="formCaptacao">
+        <div>
+            <label for="codigo">Código:</label>
+            <input type="number" id="codigo" name="codigo" required>
+        </div>
+        <div>
+            <label for="captador1">Captador 1:</label>
+            <select id="captador1" name="captador1" required onchange="updateManager()"></select>
+        </div>
+        <div>
+            <label for="captador2">Captador 2:</label>
+            <select id="captador2" name="captador2" onchange="updateManager()"></select>
+        </div>
+        <div>
+            <label for="captador3">Captador 3:</label>
+            <select id="captador3" name="captador3" onchange="updateManager()"></select>
+        </div>
+        <div>
+            <label for="gerente">Gerente:</label>
+            <input type="text" id="gerente" name="gerente" readonly>
+        </div>
+        <div>
+            <label for="dataEntrada">Data de Entrada:</label>
+            <input type="date" id="dataEntrada" name="dataEntrada" required>
+        </div>
+        
+        <div>
+            <label for="tipo">Tipo:</label>
+            <select id="tipo" name="tipo" required>
+                <option value="">Selecione o tipo</option>
+                <option value="Sala/Loja/Ponto-comercial/Empreendimento">Sala/Loja/Ponto-comercial/Empreendimento</option>
+                <option value="Casa">Casa</option>
+                <option value="Apartamento 5 quartos/Cobertura">Apartamento 5 quartos/Cobertura</option>
+                <option value="Lote-Área-Terreno">Lote-Área-Terreno</option>
+                <option value="Apartamento 2 quartos">Apartamento 2 quartos</option>
+                <option value="Apartamento 3 quartos">Apartamento 3 quartos</option>
+                <option value="Apartamento 4 quartos">Apartamento 4 quartos</option>
+                <option value="Sítio/Chácara/Fazenda/Galpão/Sobrado">Sítio/Chácara/Fazenda/Galpão/Sobrado</option>
+                <option value="Flat/Kitchenette/Apart-hotel/Loft/Apartamento 1 quarto">Flat/Kitchenette/Apart-hotel/Loft/Apartamento 1 quarto</option>
+                <option value="Garagem/Estacionamento">Garagem/Estacionamento</option>
+                <option value="Prédio/Hotel">Prédio/Hotel</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="valor">Valor:</label>
+            <input type="number" id="valor" name="valor" required step="0.01">
+        </div>
+        <div>
+            <label for="bairro">Bairro:</label>
+            <select id="bairro" name="bairro" required></select>
+        </div>
+
+        <div>
+            <label for="focoPP">Foco PP:</label>
+            <input type="checkbox" id="focoPP" name="focoPP">
+        </div>
+        <div>
+            <label for="focoAC">Foco AC:</label>
+            <input type="checkbox" id="focoAC" name="focoAC">
+        </div>
+        <button type="button" onclick="submitForm()">Enviar</button>
+    </form>
+
+<script>
+    // Função chamada quando o documento é completamente carregado.
+    document.addEventListener('DOMContentLoaded', function() {
+        google.script.run.withSuccessHandler(buildDropdowns).getCaptadores();
+        google.script.run.withSuccessHandler(buildBairroDropdown).getBairros();
+    });
+
+    // Constrói o dropdown de captadores e atualiza os valores dos captadores baseado nos dados recebidos.
+    function buildDropdowns(data) {
+        const captadores = ['captador1', 'captador2', 'captador3'];
+        captadores.forEach(function(id) {
+            let select = document.getElementById(id);
+            select.innerHTML = '<option value="">Selecione um captador</option>';
+            data.forEach(function(item) {
+                let option = document.createElement('option');
+                option.text = item.Nome;
+                option.value = item.IdCorretor;
+                select.appendChild(option);
+            });
+        });
+    }
+
+    // Constrói o dropdown de bairros e atualiza os valores dos bairros baseado nos dados recebidos.
+    function buildBairroDropdown(bairros) {
+        var select = document.getElementById('bairro');
+        select.innerHTML = '<option value="">Selecione um bairro</option>';
+        bairros.forEach(function(bairro) {
+            var option = document.createElement('option');
+            option.text = bairro;
+            option.value = bairro;
+            select.appendChild(option);
+        });
+    }
+
+    // Atualiza o campo de gerente baseado na seleção do captador.
+    function updateManager() {
+        let captadores = ['captador1', 'captador2', 'captador3'];
+        captadores.forEach(function(id) {
+            let select = document.getElementById(id);
+            if (select.value) {
+                google.script.run.withSuccessHandler(function(managerName) {
+                    document.getElementById('gerente').value = managerName;
+                }).getManager(select.value);
+            }
+        });
+    }
+
+    // Envia os dados do formulário para o Google Apps Script para processamento.
+    function submitForm() {
+        let form = document.getElementById('formCaptacao');
+        google.script.run
+            .withSuccessHandler(function() {
+                alert('Formulário enviado com sucesso!');
+                form.reset();
+            })
+            .withFailureHandler(function(err) {
+                alert('Falha ao enviar formulário: ' + err);
+            })
+            .submitData({
+                codigo: form.codigo.value,
+                captador1: form.captador1.value,
+                captador2: form.captador2.value,
+                captador3: form.captador3.value,
+                gerente: form.gerente.value,
+                dataEntrada: form.dataEntrada.value,
+                tipo: form.tipo.value,
+                valor: form.valor.value,
+                bairro: form.bairro.value,
+                focoPP: form.focoPP.checked,
+                focoAC: form.focoAC.checked
+            });
+    }
+</script>
+
+</body>
+</html>

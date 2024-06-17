@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registro de Saídas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* Usa 100% da altura da tela */
+            display: flex;
+            flex-direction: column; /* Organiza os itens em coluna */
+            justify-content: center; /* Centraliza verticalmente */
+            align-items: center; /* Centraliza horizontalmente */
+            background-color: #f7f7f7;
+            color: #333;
+        }
+        h1 {
+            color: #007BFF;
+            text-align: center; /* Assegura que o título está centralizado */
+            margin-bottom: 20px; /* Espaço entre o título e o formulário */
+        }
+        form {
+            width: 400px; /* Largura fixa para o formulário */
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        div {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"], input[type="date"], input[type="text"], select, textarea {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            width: 100%; /* Faz o botão ocupar toda a largura do formulário */
+            background-color: #007bff;
+            color: white;
+            padding: 10px 0; /* Padding maior para o botão */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Registro de Saídas</h1>
+    <form id="formSaida">
+        <div>
+            <label for="codigoSaida">Código:</label>
+            <input type="number" id="codigoSaida" name="codigoSaida" required oninput="fetchData()">
+        </div>
+        <div>
+            <label for="motivo">Motivo da Saída:</label>
+            <textarea id="motivo" name="motivo" required></textarea>
+        </div>
+        <div>
+            <label for="captador1Saida">Captador 1:</label>
+            <input type="text" id="captador1Saida" name="captador1Saida" readonly>
+        </div>
+        <div>
+            <label for="captador2Saida">Captador 2:</label>
+            <input type="text" id="captador2Saida" name="captador2Saida" readonly>
+        </div>
+        <div>
+            <label for="captador3Saida">Captador 3:</label>
+            <input type="text" id="captador3Saida" name="captador3Saida" readonly>
+        </div>
+        <div>
+            <label for="gerenteSaida">Gerente:</label>
+            <input type="text" id="gerenteSaida" name="gerenteSaida" readonly>
+        </div>
+        <div>
+            <label for="dataSaida">Data de Saída:</label>
+            <input type="date" id="dataSaida" name="dataSaida" required>
+        </div>
+        <button type="button" onclick="submitSaida()">Registrar Saída</button>
+    </form>
+
+    <script>
+    function fetchData() {
+        var codigo = document.getElementById('codigoSaida').value;
+        if (codigo) {
+            google.script.run.withSuccessHandler(function(data) {
+                document.getElementById('captador1Saida').value = data.captador1 || '';
+                document.getElementById('captador2Saida').value = data.captador2 || '';
+                document.getElementById('captador3Saida').value = data.captador3 || '';
+                document.getElementById('gerenteSaida').value = data.gerente || '';
+            }).getDataForExit(codigo);
+        }
+    }
+
+    function submitSaida() {
+        let form = document.getElementById('formSaida');
+        let dataSaida = form.dataSaida.value ? new Date(form.dataSaida.value).toISOString() : ''; // Converte a data para ISO string, verifica se está preenchido
+
+        google.script.run
+            .withSuccessHandler(function() {
+                alert('Saída registrada com sucesso!');
+                form.reset();
+            })
+            .withFailureHandler(function(err) {
+                alert('Falha ao registrar saída: ' + err);
+            })
+            .submitExitData({
+                codigo: form.codigoSaida.value,
+                captador1: form.captador1Saida.value,
+                captador2: form.captador2Saida.value,
+                captador3: form.captador3Saida.value,
+                gerente: form.gerenteSaida.value,
+                motivo: form.motivo.value,
+                dataSaida: dataSaida
+            });
+    }
+    </script>
+
+</body>
+</html>
