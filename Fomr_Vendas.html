@@ -90,7 +90,7 @@
         </div>
         <div>
             <label for="vendedor1">Vendedor 1:</label>
-            <select id="vendedor1" name="vendedor1" required onchange="updateManagerSelect('vendedor1')"></select>
+            <select id="vendedor1" name="vendedor1" required onchange="updateManagerSelect('vendedor1', data)"></select>
         </div>
         <div>
             <label for="imobiliaria">Imobiliária:</label>
@@ -110,7 +110,7 @@
         </div>
         <div>
             <label for="vendedor2">Vendedor 2:</label>
-            <select id="vendedor2" name="vendedor2" onchange="updateManagerSelect('vendedor2')"></select>
+            <select id="vendedor2" name="vendedor2" onchange="updateManagerSelect('vendedor2', data)"></select>
         </div>
         <div>
             <label for="porcentagemVendedor2">% Vendedor 2:</label>
@@ -126,7 +126,7 @@
         </div>
         <div>
             <label for="captador1">Captador 1:</label>
-            <select id="captador1" name="captador1" required onchange="updateManagerSelect('captador1')"></select>
+            <select id="captador1" name="captador1" required onchange="updateManagerSelect('captador1', data)"></select>
         </div>
         <div>
             <label for="porcentagemCaptador1">% Captador 1:</label>
@@ -142,7 +142,7 @@
         </div>
         <div>
             <label for="captador2">Captador 2:</label>
-            <select id="captador2" name="captador2" onchange="updateManagerSelect('captador2')"></select>
+            <select id="captador2" name="captador2" onchange="updateManagerSelect('captador2', data)"></select>
         </div>
         <div>
             <label for="porcentagemCaptador2">% Captador 2:</label>
@@ -169,7 +169,10 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    google.script.run.withSuccessHandler(buildDropdowns).getCorretoresComGerentes();
+    google.script.run.withSuccessHandler(function(data) {
+        window.corretoresData = data;
+        buildDropdowns(data);
+    }).getCorretoresComGerentes();
 });
 
 function buildDropdowns(data) {
@@ -178,10 +181,10 @@ function buildDropdowns(data) {
     populateDropdown('captador1', data, 'Selecionar Corretor');
     populateDropdown('captador2', data, 'Selecionar Corretor');
 
-    document.getElementById('vendedor1').onchange = () => updateManagerSelect('vendedor1', data);
-    document.getElementById('vendedor2').onchange = () => updateManagerSelect('vendedor2', data);
-    document.getElementById('captador1').onchange = () => updateManagerSelect('captador1', data);
-    document.getElementById('captador2').onchange = () => updateManagerSelect('captador2', data);
+    document.getElementById('vendedor1').onchange = () => updateManagerSelect('vendedor1', window.corretoresData);
+    document.getElementById('vendedor2').onchange = () => updateManagerSelect('vendedor2', window.corretoresData);
+    document.getElementById('captador1').onchange = () => updateManagerSelect('captador1', window.corretoresData);
+    document.getElementById('captador2').onchange = () => updateManagerSelect('captador2', window.corretoresData);
 }
 
 function populateDropdown(elementId, options, placeholder = 'Selecionar') {

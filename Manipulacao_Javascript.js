@@ -55,7 +55,7 @@ function getCorretoresComGerentes() {
     const sheetCorretores = ss.getSheetByName('Dim_Corretor');
     const sheetGerentes = ss.getSheetByName('Dim_Gerente');
     
-    const corretores = sheetCorretores.getRange('A2:B' + sheetCorretores.getLastRow()).getValues();
+    const corretores = sheetCorretores.getRange('A2:C' + sheetCorretores.getLastRow()).getValues();
     const gerentes = sheetGerentes.getRange('A2:C' + sheetGerentes.getLastRow()).getValues();
     const gerentesMap = new Map(gerentes.map(row => [row[0], row[1]]));
     
@@ -67,6 +67,24 @@ function getCorretoresComGerentes() {
     }));
 }
 
+function updateManagerSelect(corretorId, allData) {
+    const selectedCorretor = document.getElementById(corretorId).value;
+    const managerSelectId = corretorId.includes('vendedor') ?
+                            corretorId.replace('vendedor', 'gerenteVenda') :
+                            corretorId.replace('captador', 'gerenteCaptacao');
+    const managerSelect = document.getElementById(managerSelectId);
+    managerSelect.innerHTML = '<option value="">Selecionar Gerente</option>';
+
+    const managerData = allData.find(item => item.id === selectedCorretor);
+    if (managerData && managerData.nomeGerente) {
+        const opt = document.createElement('option');
+        opt.value = managerData.idGerente;
+        opt.textContent = managerData.nomeGerente;
+        managerSelect.appendChild(opt);
+        managerSelect.value = managerData.idGerente;
+    }
+}
+
 function populateDropdown(elementId, options) {
     const select = document.getElementById(elementId);
     select.innerHTML = '';
@@ -76,21 +94,6 @@ function populateDropdown(elementId, options) {
         opt.textContent = option.nome;
         select.appendChild(opt);
     });
-}
-
-function updateManagerSelect(elementId, options) {
-    const select = document.getElementById(elementId);
-    const selectedValue = select.value;
-    const managerSelectId = elementId.replace('vendedor', 'gerenteVenda').replace('captador', 'gerenteCaptacao');
-    const managerSelect = document.getElementById(managerSelectId);
-    managerSelect.innerHTML = ''; // Limpar opções existentes
-    const managerInfo = options.find(option => option.id === selectedValue);
-    if (managerInfo) {
-        const opt = document.createElement('option');
-        opt.value = managerInfo.idGerente;
-        opt.textContent = managerInfo.nomeGerente;
-        managerSelect.appendChild(opt);
-    }
 }
 
 function submitSalesData(data) {
