@@ -96,7 +96,6 @@ function populateDropdown(elementId, options) {
     });
 }
 
-
 function submitSalesData(data) {
     const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
     const sheetVendas = ss.getSheetByName('Fato_Venda');
@@ -192,3 +191,86 @@ function submitSalesData(data) {
 
     return "Dados de venda registrados com sucesso e fórmulas copiadas.";
 }
+
+function submitData(data) {
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
+    const sheetCaptacao = ss.getSheetByName('Fato_Captacao');
+    const sheetImovel = ss.getSheetByName('Dim_Imovel');
+
+    sheetCaptacao.appendRow([
+        data.codigo, data.captador1, data.captador2, data.captador3,
+        data.gerente, data.dataEntrada
+    ]);
+
+    sheetImovel.appendRow([
+        data.codigo, data.tipo, data.valor, data.bairro,
+        data.focoPP ? 'TRUE' : 'FALSE', data.focoAC ? 'TRUE' : 'FALSE'
+    ]);
+
+    // Chamar a função para mostrar a mensagem de sucesso com detalhes
+    showSuccessMessage(data);
+}
+
+function showSuccessMessage(data) {
+    const message = 'Sucesso! A captação foi registrada com sucesso:\n' +
+                    'Código: ' + data.codigo + '\n' +
+                    'Tipo: ' + data.tipo + '\n' +
+                    'Valor: ' + data.valor + '\n' +
+                    'Bairro: ' + data.bairro + '\n' +
+                    'Data de Entrada: ' + data.dataEntrada;
+    SpreadsheetApp.getUi().alert(message);
+}
+
+function getDataForExit(codigo) {
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
+    const sheet = ss.getSheetByName('Fato_Estoque');
+    const data = sheet.getRange('A2:F' + sheet.getLastRow()).getValues();
+    const filteredData = data.filter(row => row[0].toString() === codigo.toString());
+
+    if (filteredData.length > 0) {
+        const sortedData = filteredData.sort((a, b) => new Date(b[5]) - new Date(a[5]));
+        const latest = sortedData[0];
+        return {
+            captador1: latest[1],
+            captador2: latest[2],
+            captador3: latest[3],
+            gerente: latest[4]
+        };
+    } else {
+        return {}; // Retorna um objeto vazio se não encontrar dados
+    }
+}
+
+function submitExitData(data) {
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
+    const sheet = ss.getSheetByName('Fato_Saida');
+    const dataDeSaida = data.dataSaida ? new Date(data.dataSaida) : new Date(); // Usa a data atual como fallback
+
+    sheet.appendRow([
+        data.codigo,
+        data.captador1,
+        data.captador2,
+        data.captador3,
+        data.gerente,
+        data.motivo,
+        dataDeSaida
+    ]);
+
+    showExitSuccessMessage(data);
+}
+
+function showExitSuccessMessage(data) {
+    const date = new Date(data.dataSaida);
+    const formattedDate = date.isValid() ? date.toLocaleDateString() : 'Data inválida';
+
+    const message = 'Sucesso! A saída foi registrada com sucesso:\n' +
+                    'Código: ' + data.codigo + '\n' +
+                    'Motivo: ' + data.motivo + '\n' +
+                    'Data de Saída: ' + formattedDate;
+    SpreadsheetApp.getUi().alert(message);
+}
+
+Date.prototype.isValid = function () {
+    return this.getTime() === this.getTime();   // NaN não é igual a NaN, isso verifica se a data é NaN
+};
+
