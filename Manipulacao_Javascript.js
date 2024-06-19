@@ -38,9 +38,13 @@ function showCorretorForm() {
         .setWidth(500)
         .setHeight(360);
     const nextId = getNextCorretorId();
+    const gerentes = getGerentes();
+    const gerentesOptions = gerentes.map(g => `<option value="${g.id}">${g.nome}</option>`).join('');
     html.append(`<script>
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('idCorretor').value = '${nextId}';
+            const gerenteSelect = document.getElementById('idGerente');
+            gerenteSelect.innerHTML = '<option value="">Selecionar Gerente</option>' + '${gerentesOptions}';
         });
     </script>`);
     SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Corretor');
@@ -90,6 +94,18 @@ function getManager(idCorretor) {
     const data = sheet.getRange('A2:C' + sheet.getLastRow()).getValues();
     const manager = data.find(row => row[0] === idCorretor);
     return manager ? manager[2] : '';
+}
+
+function getGerentes() {
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
+    const sheet = ss.getSheetByName('Dim_Gerente');
+    const data = sheet.getRange('A2:B' + sheet.getLastRow()).getValues();
+    return data.map(row => ({ id: row[0], nome: row[1] }));
+}
+
+function getGerentesOptions() {
+    const gerentes = getGerentes();
+    return gerentes.map(g => `<option value="${g.id}">${g.nome}</option>`).join('');
 }
 
 function getNextCorretorId() {
