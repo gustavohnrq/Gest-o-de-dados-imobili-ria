@@ -36,21 +36,33 @@ function showSalesForm() {
 function showCorretorForm() {
     const html = HtmlService.createHtmlOutputFromFile('FormularioCorretor')
         .setWidth(500)
-        .setHeight(600);
+        .setHeight(360);
+    const nextId = getNextCorretorId();
+    html.append(`<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('idCorretor').value = '${nextId}';
+        });
+    </script>`);
     SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Corretor');
 }
 
 function showGerenteForm() {
     const html = HtmlService.createHtmlOutputFromFile('FormularioGerente')
         .setWidth(500)
-        .setHeight(600);
+        .setHeight(300);
+    const nextId = getNextGerenteId();
+    html.append(`<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('idGerente').value = '${nextId}';
+        });
+    </script>`);
     SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Gerente');
 }
 
 function showEstoqueForm() {
     const html = HtmlService.createHtmlOutputFromFile('FormularioEstoque')
         .setWidth(500)
-        .setHeight(600);
+        .setHeight(300);
     SpreadsheetApp.getUi().showModalDialog(html, 'Lançar Estoque');
 }
 
@@ -78,6 +90,24 @@ function getManager(idCorretor) {
     const data = sheet.getRange('A2:C' + sheet.getLastRow()).getValues();
     const manager = data.find(row => row[0] === idCorretor);
     return manager ? manager[2] : '';
+}
+
+function getNextCorretorId() {
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
+    const sheet = ss.getSheetByName('Dim_Corretor');
+    const data = sheet.getRange('A2:A' + sheet.getLastRow()).getValues().flat();
+    const maxId = Math.max(...data.map(id => parseInt(id.replace('C61', ''))));
+    const nextId = `C61${String(maxId + 1).padStart(3, '0')}`;
+    return nextId;
+}
+
+function getNextGerenteId() {
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
+    const sheet = ss.getSheetByName('Dim_Gerente');
+    const data = sheet.getRange('A2:A' + sheet.getLastRow()).getValues().flat();
+    const maxId = Math.max(...data.map(id => parseInt(id.replace('G61', ''))));
+    const nextId = `G61${String(maxId + 1).padStart(3, '0')}`;
+    return nextId;
 }
 
 function getBairros() {
