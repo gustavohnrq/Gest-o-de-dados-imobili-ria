@@ -7,8 +7,8 @@ function onOpen() {
 
 function showMainMenu() {
     const html = HtmlService.createHtmlOutputFromFile('MenuPrincipal')
-        .setWidth(400)
-        .setHeight(300);
+        .setWidth(350)
+        .setHeight(500);
     SpreadsheetApp.getUi().showModalDialog(html, 'Menu Principal');
 }
 
@@ -45,6 +45,13 @@ function showGerenteForm() {
         .setWidth(500)
         .setHeight(600);
     SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Gerente');
+}
+
+function showEstoqueForm() {
+    const html = HtmlService.createHtmlOutputFromFile('FormularioEstoque')
+        .setWidth(500)
+        .setHeight(600);
+    SpreadsheetApp.getUi().showModalDialog(html, 'Lançar Estoque');
 }
 
 
@@ -317,5 +324,47 @@ function submitGerenteData(data) {
     const sheet = ss.getSheetByName('Dim_Gerente');
     sheet.appendRow([data.idGerente, data.nomeGerente]);
 }
+
+function showEstoqueForm() {
+    const html = HtmlService.createHtmlOutputFromFile('FormularioEstoque')
+        .setWidth(500)
+        .setHeight(600);
+    SpreadsheetApp.getUi().showModalDialog(html, 'Lançar Estoque');
+}
+
+function processFile(data) {
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
+    const sheetCorretores = ss.getSheetByName('Dim_Corretor');
+    const corretores = sheetCorretores.getRange('A2:C' + sheetCorretores.getLastRow()).getValues();
+
+    const nomeParaId = {};
+    const nomeParaGerente = {};
+
+    corretores.forEach(corretor => {
+        nomeParaId[corretor[1]] = corretor[0];
+        nomeParaGerente[corretor[1]] = corretor[2];
+    });
+
+    const updatedRows = [];
+
+    const headers = data[0];
+    const rows = data.slice(1);
+
+    rows.forEach(row => {
+        const codigo = row[0];
+        const captador1 = nomeParaId[row[1]] || row[1];
+        const captador2 = nomeParaId[row[2]] || row[2];
+        const captador3 = nomeParaId[row[3]] || row[3];
+        const gerente = nomeParaGerente[row[1]] || '';
+        const dataEstoque = row[5];
+        updatedRows.push([codigo, captador1, captador2, captador3, gerente, dataEstoque]);
+    });
+
+    const sheetEstoque = ss.getSheetByName('Fato_Estoque');
+    sheetEstoque.getRange(sheetEstoque.getLastRow() + 1, 1, updatedRows.length, updatedRows[0].length).setValues(updatedRows);
+
+    return 'Arquivo processado e estoque atualizado com sucesso!';
+}
+
 
 
