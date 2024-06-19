@@ -33,6 +33,13 @@ function showSalesForm() {
     SpreadsheetApp.getUi().showModalDialog(html, 'Registro de Vendas');
 }
 
+function showCorretorForm() {
+    const html = HtmlService.createHtmlOutputFromFile('FormularioCorretor')
+        .setWidth(500)
+        .setHeight(600);
+    SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Corretor');
+}
+
 function hideSheets(sheetNames) {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     sheetNames.forEach(sheetName => {
@@ -288,4 +295,12 @@ function showExitSuccessMessage(data) {
 Date.prototype.isValid = function () {
     return this.getTime() === this.getTime();   // NaN não é igual a NaN, isso verifica se a data é NaN
 };
+
+
+function submitCorretorData(data) {
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw'); // ID do seu Google Sheets
+    const sheet = ss.getSheetByName('Dim_Corretor');
+    sheet.appendRow([data.idCorretor, data.nomeCorretor, data.idGerente]);
+}
+
 
