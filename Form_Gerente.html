@@ -73,6 +73,10 @@
                 alert('Falha ao cadastrar gerente: ' + err.message);
             }).submitGerenteData(data);
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('idGerente').value = google.script.run.getNextGerenteId();
+        });
     </script>
 </body>
 </html>
