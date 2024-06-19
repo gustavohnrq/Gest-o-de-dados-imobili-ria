@@ -1,14 +1,19 @@
 function onOpen() {
     const ui = SpreadsheetApp.getUi();
     ui.createMenu('Gestão de Dados')
-        .addItem('Registrar Captação', 'showForm')
-        .addItem('Registrar Saída', 'showExitForm')
-        .addItem('Registrar Venda', 'showSalesForm')
+        .addItem('Menu Principal', 'showMainMenu')
         .addToUi();
 }
 
-function showForm() {
-    const html = HtmlService.createHtmlOutputFromFile('Formulario')
+function showMainMenu() {
+    const html = HtmlService.createHtmlOutputFromFile('MenuPrincipal')
+        .setWidth(400)
+        .setHeight(300);
+    SpreadsheetApp.getUi().showModalDialog(html, 'Menu Principal');
+}
+
+function showFormCaps() {
+    const html = HtmlService.createHtmlOutputFromFile('FormularioCaps')
         .setWidth(500)
         .setHeight(600);
     SpreadsheetApp.getUi().showModalDialog(html, 'Registro de Captações');
@@ -26,6 +31,16 @@ function showSalesForm() {
         .setWidth(500)
         .setHeight(600);
     SpreadsheetApp.getUi().showModalDialog(html, 'Registro de Vendas');
+}
+
+function hideSheets(sheetNames) {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    sheetNames.forEach(sheetName => {
+        const sheet = ss.getSheetByName(sheetName);
+        if (sheet) {
+            sheet.hideSheet();
+        }
+    });
 }
 
 function getCaptadores() {
