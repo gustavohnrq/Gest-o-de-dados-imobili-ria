@@ -40,6 +40,14 @@ function showCorretorForm() {
     SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Corretor');
 }
 
+function showGerenteForm() {
+    const html = HtmlService.createHtmlOutputFromFile('FormularioGerente')
+        .setWidth(500)
+        .setHeight(600);
+    SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Gerente');
+}
+
+
 function hideSheets(sheetNames) {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     sheetNames.forEach(sheetName => {
@@ -301,6 +309,13 @@ function submitCorretorData(data) {
     const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw'); // ID do seu Google Sheets
     const sheet = ss.getSheetByName('Dim_Corretor');
     sheet.appendRow([data.idCorretor, data.nomeCorretor, data.idGerente]);
+}
+
+
+function submitGerenteData(data) {
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw'); // ID do seu Google Sheets
+    const sheet = ss.getSheetByName('Dim_Gerente');
+    sheet.appendRow([data.idGerente, data.nomeGerente]);
 }
 
 
