@@ -78,6 +78,10 @@
                 alert('Falha ao cadastrar corretor: ' + err.message);
             }).submitCorretorData(data);
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('idCorretor').value = google.script.run.getNextCorretorId();
+        });
     </script>
 </body>
 </html>
