@@ -57,8 +57,10 @@
             <input type="text" id="nomeCorretor" name="nomeCorretor" required>
         </div>
         <div>
-            <label for="idGerente">ID do Gerente:</label>
-            <input type="text" id="idGerente" name="idGerente" required>
+            <label for="idGerente">Gerente:</label>
+            <select id="idGerente" name="idGerente" required>
+                <option value="">Selecionar Gerente</option>
+            </select>
         </div>
         <button type="button" onclick="submitForm()">Cadastrar</button>
     </form>
@@ -80,7 +82,14 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('idCorretor').value = google.script.run.getNextCorretorId();
+            google.script.run.withSuccessHandler(function(nextId) {
+                document.getElementById('idCorretor').value = nextId;
+            }).getNextCorretorId();
+            
+            google.script.run.withSuccessHandler(function(gerentesOptions) {
+                const gerenteSelect = document.getElementById('idGerente');
+                gerenteSelect.innerHTML = '<option value="">Selecionar Gerente</option>' + gerentesOptions;
+            }).getGerentesOptions();
         });
     </script>
 </body>
