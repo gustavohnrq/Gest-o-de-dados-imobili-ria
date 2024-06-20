@@ -36,7 +36,7 @@ function showSalesForm() {
 function showCorretorForm() {
     const html = HtmlService.createHtmlOutputFromFile('FormularioCorretor')
         .setWidth(500)
-        .setHeight(360);
+        .setHeight(420);
     const nextId = getNextCorretorId();
     const gerentes = getGerentes();
     const gerentesOptions = gerentes.map(g => `<option value="${g.id}">${g.nome}</option>`).join('');
@@ -53,7 +53,7 @@ function showCorretorForm() {
 function showGerenteForm() {
     const html = HtmlService.createHtmlOutputFromFile('FormularioGerente')
         .setWidth(500)
-        .setHeight(300);
+        .setHeight(360);
     const nextId = getNextGerenteId();
     html.append(`<script>
         document.addEventListener('DOMContentLoaded', function() {

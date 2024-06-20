@@ -37,6 +37,14 @@
         button:hover {
             background-color: #0056b3;
         }
+                .btn-primary {
+            width: 100%;
+            margin-top: 10px;
+            background-color: #007BFF;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -48,7 +56,8 @@
         </div>
         <button type="button" onclick="uploadFile()">Upload</button>
     </form>
-
+    <button class="btn-primary" onclick="google.script.run.showMainMenu()">Menu Principal</button>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script>
         function uploadFile() {
@@ -69,6 +78,10 @@
                 }).processFile(json);
             };
             reader.readAsArrayBuffer(file);
+        }
+
+                function goBackToMenu() {
+            window.location.href = 'MenuPrincipal.html';
         }
     </script>
 </body>
