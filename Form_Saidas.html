@@ -53,6 +53,14 @@
         button:hover {
             background-color: #0056b3;
         }
+        .btn-primary {
+            width: 100%;
+            margin-top: 10px;
+            background-color: #007BFF;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
@@ -89,7 +97,7 @@
         </div>
         <button type="button" onclick="submitSaida()">Registrar Saída</button>
     </form>
-
+    <button class="btn-primary" onclick="google.script.run.showMainMenu()">Menu Principal</button>
     <script>
     function fetchData() {
         var codigo = document.getElementById('codigoSaida').value;
