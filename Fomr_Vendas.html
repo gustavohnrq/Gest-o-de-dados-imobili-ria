@@ -43,7 +43,7 @@
         button:hover {
             background-color: #0056b3;
         }
-                .btn-primary {
+        .btn-primary {
             width: 100%;
             margin-top: 10px;
             background-color: #007BFF;
@@ -54,7 +54,7 @@
     </style>
 </head>
 <body>
-    <h1>Registro de Vendas</h1>
+    
     <form id="formVendas">
         <div>
             <label for="san">SAN:</label>
@@ -66,7 +66,9 @@
         </div>
         <div>
             <label for="bairro">Bairro:</label>
-            <input type="text" id="bairro" name="bairro" required>
+            <select id="bairro" name="bairro" required>
+                <option value="">Selecione um Bairro</option>
+            </select>
         </div>
         <div>
             <label for="quadra">Quadra:</label>
@@ -74,7 +76,9 @@
         </div>
         <div>
             <label for="tipo">Tipo:</label>
-            <input type="text" id="tipo" name="tipo" required>
+            <select id="tipo" name="tipo" required>
+                <option value="">Selecione um Tipo</option>
+            </select>
         </div>
         <div>
             <label for="focoPP">Foco PP:</label>
@@ -98,7 +102,7 @@
         </div>
         <div>
             <label for="vendedor1">Vendedor 1:</label>
-            <select id="vendedor1" name="vendedor1" required onchange="updateManagerSelect('vendedor1', data)"></select>
+            <select id="vendedor1" name="vendedor1" required></select>
         </div>
         <div>
             <label for="imobiliaria">Imobiliária:</label>
@@ -118,7 +122,7 @@
         </div>
         <div>
             <label for="vendedor2">Vendedor 2:</label>
-            <select id="vendedor2" name="vendedor2" onchange="updateManagerSelect('vendedor2', data)"></select>
+            <select id="vendedor2" name="vendedor2"></select>
         </div>
         <div>
             <label for="porcentagemVendedor2">% Vendedor 2:</label>
@@ -134,7 +138,7 @@
         </div>
         <div>
             <label for="captador1">Captador 1:</label>
-            <select id="captador1" name="captador1" required onchange="updateManagerSelect('captador1', data)"></select>
+            <select id="captador1" name="captador1" required></select>
         </div>
         <div>
             <label for="porcentagemCaptador1">% Captador 1:</label>
@@ -150,7 +154,7 @@
         </div>
         <div>
             <label for="captador2">Captador 2:</label>
-            <select id="captador2" name="captador2" onchange="updateManagerSelect('captador2', data)"></select>
+            <select id="captador2" name="captador2"></select>
         </div>
         <div>
             <label for="porcentagemCaptador2">% Captador 2:</label>
@@ -181,6 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
         window.corretoresData = data;
         buildDropdowns(data);
     }).getCorretoresComGerentes();
+    google.script.run.withSuccessHandler(loadOptions).getOptions();
 });
 
 function buildDropdowns(data) {
@@ -224,6 +229,32 @@ function updateManagerSelect(corretorId, allData) {
     }
 }
 
+function loadOptions() {
+    google.script.run.withSuccessHandler(function(options) {
+        const tipoSelect = document.getElementById('tipo');
+        tipoSelect.innerHTML = '<option value="">Selecione um Tipo</option>';
+        options.tipos.forEach(function(tipo) {
+            const opt = document.createElement('option');
+            opt.value = tipo.id;
+            opt.text = tipo.nome;
+            tipoSelect.add(opt);
+        });
+
+        const bairroSelect = document.getElementById('bairro');
+        bairroSelect.innerHTML = '<option value="">Selecione um Bairro</option>';
+        options.bairros.forEach(function(bairro) {
+            const opt = document.createElement('option');
+            opt.value = bairro.id;
+            opt.text = bairro.nome;
+            bairroSelect.add(opt);
+        });
+    }).getOptions();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadOptions();
+});
+
 function submitForm() {
     const form = document.getElementById('formVendas');
     google.script.run.withSuccessHandler(function(response) {
@@ -266,3 +297,4 @@ function submitForm() {
 </script>
 </body>
 </html>
+

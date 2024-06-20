@@ -8,7 +8,7 @@ function onOpen() {
 function showMainMenu() {
     const html = HtmlService.createHtmlOutputFromFile('MenuPrincipal')
         .setWidth(350)
-        .setHeight(500);
+        .setHeight(600);
     SpreadsheetApp.getUi().showModalDialog(html, 'Menu Principal');
 }
 
@@ -22,7 +22,7 @@ function showFormCaps() {
 function showExitForm() {
     const html = HtmlService.createHtmlOutputFromFile('FormularioSaida')
         .setWidth(500)
-        .setHeight(600);
+        .setHeight(650);
     SpreadsheetApp.getUi().showModalDialog(html, 'Registro de Saídas');
 }
 
@@ -67,9 +67,22 @@ function showEstoqueForm() {
     const html = HtmlService.createHtmlOutputFromFile('FormularioEstoque')
         .setWidth(500)
         .setHeight(300);
-    SpreadsheetApp.getUi().showModalDialog(html, 'Lançar Estoque');
+    SpreadsheetApp.getUi().showModalDialog(html, 'Registrar Estoque');
 }
 
+function showTipoForm() {
+    const html = HtmlService.createHtmlOutputFromFile('FormularioTipo')
+        .setWidth(500)
+        .setHeight(400);
+    SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Tipo');
+}
+
+function showBairroForm() {
+    const html = HtmlService.createHtmlOutputFromFile('FormularioBairro')
+        .setWidth(500)
+        .setHeight(400);
+    SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Bairro');
+}
 
 function hideSheets(sheetNames) {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -108,6 +121,47 @@ function getGerentesOptions() {
     return gerentes.map(g => `<option value="${g.id}">${g.nome}</option>`).join('');
 }
 
+function getOptions() {
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
+    const sheetTipos = ss.getSheetByName('Dim_Tipo');
+    const sheetBairros = ss.getSheetByName('Dim_Bairro');
+
+    const tiposData = sheetTipos.getRange('A2:B' + sheetTipos.getLastRow()).getValues();
+    const bairrosData = sheetBairros.getRange('A2:B' + sheetBairros.getLastRow()).getValues();
+
+    const tipos = tiposData.map(row => ({ id: row[0], nome: row[1] }));
+    const bairros = bairrosData.map(row => ({ id: row[0], nome: row[1] }));
+
+    return { tipos: tipos, bairros: bairros };
+}// Ids Tipo e Bairro Form_Caps
+
+function getBairros() {
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
+    const sheet = ss.getSheetByName('Dim_Imovel');
+    const bairros = sheet.getRange('D2:D' + sheet.getLastRow()).getValues();
+    return [...new Set(bairros.map(row => row[0]).filter(Boolean))];
+}
+
+function getDataForExit(codigo) {
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
+    const sheet = ss.getSheetByName('Fato_Estoque');
+    const data = sheet.getRange('A2:F' + sheet.getLastRow()).getValues();
+    const filteredData = data.filter(row => row[0].toString() === codigo.toString());
+
+    if (filteredData.length > 0) {
+        const sortedData = filteredData.sort((a, b) => new Date(b[5]) - new Date(a[5]));
+        const latest = sortedData[0];
+        return {
+            captador1: latest[1],
+            captador2: latest[2],
+            captador3: latest[3],
+            gerente: latest[4]
+        };
+    } else {
+        return {}; // Retorna um objeto vazio se não encontrar dados
+    }
+}
+
 function getNextCorretorId() {
     const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
     const sheet = ss.getSheetByName('Dim_Corretor');
@@ -126,11 +180,38 @@ function getNextGerenteId() {
     return nextId;
 }
 
-function getBairros() {
+function getNextTipoId() {
     const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
-    const sheet = ss.getSheetByName('Dim_Imovel');
-    const bairros = sheet.getRange('D2:D' + sheet.getLastRow()).getValues();
-    return [...new Set(bairros.map(row => row[0]).filter(Boolean))];
+    const sheet = ss.getSheetByName('Dim_Tipo');
+    const data = sheet.getRange('A2:A' + sheet.getLastRow()).getValues().flat();
+    
+    let maxId = 0;
+    data.forEach(id => {
+        const num = parseInt(id.replace('T', ''));
+        if (!isNaN(num) && num > maxId) {
+            maxId = num;
+        }
+    });
+
+    const nextId = `T${String(maxId + 1).padStart(3, '0')}`;
+    return nextId;
+}
+
+function getNextBairroId() {
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
+    const sheet = ss.getSheetByName('Dim_Bairro');
+    const data = sheet.getRange('A2:A' + sheet.getLastRow()).getValues().flat();
+    
+    let maxId = 0;
+    data.forEach(id => {
+        const num = parseInt(id.replace('B', ''));
+        if (!isNaN(num) && num > maxId) {
+            maxId = num;
+        }
+    });
+
+    const nextId = `B${String(maxId + 1).padStart(3, '0')}`;
+    return nextId;
 }
 
 function getCorretoresComGerentes() {
@@ -290,38 +371,7 @@ function submitData(data) {
         data.focoPP ? 'TRUE' : 'FALSE', data.focoAC ? 'TRUE' : 'FALSE'
     ]);
 
-    // Chamar a função para mostrar a mensagem de sucesso com detalhes
     showSuccessMessage(data);
-}
-
-function showSuccessMessage(data) {
-    const message = 'Sucesso! A captação foi registrada com sucesso:\n' +
-                    'Código: ' + data.codigo + '\n' +
-                    'Tipo: ' + data.tipo + '\n' +
-                    'Valor: ' + data.valor + '\n' +
-                    'Bairro: ' + data.bairro + '\n' +
-                    'Data de Entrada: ' + data.dataEntrada;
-    SpreadsheetApp.getUi().alert(message);
-}
-
-function getDataForExit(codigo) {
-    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
-    const sheet = ss.getSheetByName('Fato_Estoque');
-    const data = sheet.getRange('A2:F' + sheet.getLastRow()).getValues();
-    const filteredData = data.filter(row => row[0].toString() === codigo.toString());
-
-    if (filteredData.length > 0) {
-        const sortedData = filteredData.sort((a, b) => new Date(b[5]) - new Date(a[5]));
-        const latest = sortedData[0];
-        return {
-            captador1: latest[1],
-            captador2: latest[2],
-            captador3: latest[3],
-            gerente: latest[4]
-        };
-    } else {
-        return {}; // Retorna um objeto vazio se não encontrar dados
-    }
 }
 
 function submitExitData(data) {
@@ -342,40 +392,16 @@ function submitExitData(data) {
     showExitSuccessMessage(data);
 }
 
-function showExitSuccessMessage(data) {
-    const date = new Date(data.dataSaida);
-    const formattedDate = date.isValid() ? date.toLocaleDateString() : 'Data inválida';
-
-    const message = 'Sucesso! A saída foi registrada com sucesso:\n' +
-                    'Código: ' + data.codigo + '\n' +
-                    'Motivo: ' + data.motivo + '\n' +
-                    'Data de Saída: ' + formattedDate;
-    SpreadsheetApp.getUi().alert(message);
-}
-
-Date.prototype.isValid = function () {
-    return this.getTime() === this.getTime();   // NaN não é igual a NaN, isso verifica se a data é NaN
-};
-
-
 function submitCorretorData(data) {
     const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw'); // ID do seu Google Sheets
     const sheet = ss.getSheetByName('Dim_Corretor');
     sheet.appendRow([data.idCorretor, data.nomeCorretor, data.idGerente]);
 }
 
-
 function submitGerenteData(data) {
     const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw'); // ID do seu Google Sheets
     const sheet = ss.getSheetByName('Dim_Gerente');
     sheet.appendRow([data.idGerente, data.nomeGerente]);
-}
-
-function showEstoqueForm() {
-    const html = HtmlService.createHtmlOutputFromFile('FormularioEstoque')
-        .setWidth(500)
-        .setHeight(600);
-    SpreadsheetApp.getUi().showModalDialog(html, 'Lançar Estoque');
 }
 
 function processFile(data) {
@@ -412,5 +438,41 @@ function processFile(data) {
     return 'Arquivo processado e estoque atualizado com sucesso!';
 }
 
+function submitTipoData(data) {
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw'); // ID do seu Google Sheets
+    const sheet = ss.getSheetByName('Dim_Tipo');
+    sheet.appendRow([data.idTipo, data.nomeTipo]);
+}
+
+function submitBairroData(data) {
+    const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw'); // ID do seu Google Sheets
+    const sheet = ss.getSheetByName('Dim_Bairro');
+    sheet.appendRow([data.idBairro, data.nomeBairro]);
+}
+
+function showSuccessMessage(data) {
+    const message = 'Sucesso! A captação foi registrada com sucesso:\n' +
+                    'Código: ' + data.codigo + '\n' +
+                    'Tipo: ' + data.tipo + '\n' +
+                    'Valor: ' + data.valor + '\n' +
+                    'Bairro: ' + data.bairro + '\n' +
+                    'Data de Entrada: ' + data.dataEntrada;
+    SpreadsheetApp.getUi().alert(message);
+}
+
+function showExitSuccessMessage(data) {
+    const date = new Date(data.dataSaida);
+    const formattedDate = date.isValid() ? date.toLocaleDateString() : 'Data inválida';
+
+    const message = 'Sucesso! A saída foi registrada com sucesso:\n' +
+                    'Código: ' + data.codigo + '\n' +
+                    'Motivo: ' + data.motivo + '\n' +
+                    'Data de Saída: ' + formattedDate;
+    SpreadsheetApp.getUi().alert(message);
+}
+
+Date.prototype.isValid = function () {
+    return this.getTime() === this.getTime();   // NaN não é igual a NaN, isso verifica se a data é NaN
+};
 
 
