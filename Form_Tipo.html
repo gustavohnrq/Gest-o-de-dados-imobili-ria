@@ -4,69 +4,126 @@
     <title>Cadastro de Tipo</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-            color: #333;
+            margin: 0;
+            padding: 0;
+            font-family: Roboto, Arial, sans-serif;
+            background: linear-gradient(120deg, #FAC80B, #DC2963);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
         }
-        h1 {
+        .center {
+            width: 40vw; /* Ajustar a largura conforme necessário */
+            max-width: 500px; /* Limite de largura máxima */
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        .center h1 {
+            text-align: center;
+            padding: 0 0 20px 0;
+            border-bottom: 1px solid silver;
             color: #007BFF;
         }
         form {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 0 40px;
+            box-sizing: border-box;
+            overflow-y: auto; /* Adicione isso para permitir a rolagem */
+            max-height: 60vh; /* Limite a altura do formulário */
         }
-        div {
-            margin-bottom: 10px;
+        .txt_field {
+            position: relative;
+            margin: 30px 0;
         }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input[type="text"] {
+        .txt_field input {
             width: 100%;
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-        button {
-            background-color: #007BFF;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            padding: 10px 5px;
             font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: none;
+            outline: none;
+            box-sizing: border-box;
         }
-        button:hover {
-            background-color: #0056b3;
+        .txt_field input[type="file"] {
+            padding: 10px 0; /* Ajuste para o campo de arquivo */
+        }
+        .txt_field label {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            color: #adadad;
+            transform: translateY(-50%);
+            font-size: 16px;
+            pointer-events: none;
+            transition: .5s;
+        }
+        .txt_field input:focus ~ label,
+        .txt_field input:valid ~ label {
+            top: -20px;
+            left: 5px;
+            color: #007BFF;
+            font-size: 12px;
+            background: white;
+            padding: 0 5px;
+        }
+        .txt_field input[type="date"] {
+            padding-right: 5px; /* Ajuste para o campo de data */
+        }
+        input[type="submit"], button {
+            width: 100%;
+            height: 50px;
+            border: 1px solid;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            background-color: #38B24A;
+            color: white;
+            transition: .5s;
+            margin-top: 10px;
+        }
+        input[type="submit"]:hover, button:hover {
+            background: #2d8f39;
+            color: #e9f4fb;
         }
         .btn-primary {
             width: 100%;
             margin-top: 10px;
-            background-color: #007BFF;
+            background-color: #9B74B1;
+            color: white;
+            padding: 10px 0;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
         .btn-primary:hover {
-            background-color: #0056b3;
+            background-color: #7c5a92;
         }
     </style>
 </head>
 <body>
-    <h1>Cadastro de Tipo</h1>
-    <form id="formTipo">
-        <div>
-            <label for="idTipo">ID do Tipo:</label>
-            <input type="text" id="idTipo" name="idTipo" required readonly>
-        </div>
-        <div>
-            <label for="nomeTipo">Nome do Tipo:</label>
-            <input type="text" id="nomeTipo" name="nomeTipo" required>
-        </div>
-        <button type="button" onclick="submitForm()">Cadastrar</button>
-    </form>
-    <button class="btn-primary" onclick="google.script.run.showMainMenu()">Menu Principal</button>
+    <div class="center">
+        
+        <form id="formTipo">
+            <div class="txt_field">
+                <input type="text" id="idTipo" name="idTipo" required readonly>
+                <label for="idTipo">ID do Tipo</label>
+            </div>
+            <div class="txt_field">
+                <input type="text" id="nomeTipo" name="nomeTipo" required>
+                <label for="nomeTipo">Nome do Tipo</label>
+            </div>
+            <button type="button" onclick="submitForm()">Cadastrar</button>
+        </form>
+        <button class="btn-primary" onclick="google.script.run.showMainMenu()">Menu Principal</button>
+    </div>
     <script>
         function submitForm() {
             const form = document.getElementById('formTipo');

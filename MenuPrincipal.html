@@ -6,64 +6,69 @@
     <title>Menu Principal</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            font-family: Roboto, Arial, sans-serif;
+            background: linear-gradient(120deg, #9B74B1, #74BAE6);
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
-            margin: 0;
+            overflow: auto;
         }
         .menu {
+            width: 60vw; /* Ajuste para ocupar mais largura */
+            max-width: 800px;
             background: white;
-            padding: 40px 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
             text-align: center;
-            width: 300px;
         }
         .menu h1 {
-            margin-bottom: 20px;
-            color: #333;
+            text-align: center;
+            padding: 0 0 20px 0;
+            border-bottom: 1px solid silver;
+            color: #007BFF;
             font-size: 24px;
         }
-        .menu button {
-            display: block;
-            margin: 15px 0;
-            padding: 12px;
-            width: 100%;
-            background-color: #007BFF;
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .button-container button {
+            flex: 1 1 45%; /* Flex grow, flex shrink, flex basis */
+            margin: 10px;
+            padding: 15px;
+            background-color: #38B24A;
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 25px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
+            font-weight: 700;
             transition: background-color 0.3s;
         }
-        .menu button:hover {
-            background-color: #0056b3;
+        .button-container button:hover {
+            background-color: #2d8f39;
         }
     </style>
 </head>
 <body>
     <div class="menu">
-        <button onclick="google.script.run.showFormCaps()">Registrar Captação</button>
-        <button onclick="google.script.run.showExitForm()">Registrar Saída</button>
-        <button onclick="google.script.run.showEstoqueForm()">Registrar Estoque</button>
-        <button onclick="google.script.run.showSalesForm()">Registrar Venda</button>
-        <button onclick="google.script.run.showCorretorForm()">Cadastrar Corretor</button>
-        <button onclick="google.script.run.showGerenteForm()">Cadastrar Gerente</button>
-        <button onclick="google.script.run.showTipoForm()">Cadastrar Tipo</button>
-        <button onclick="google.script.run.showBairroForm()">Cadastrar Bairro</button>
+        
+        <div class="button-container">
+            <button onclick="google.script.run.showFormCaps()">Registrar Captação</button>
+            <button onclick="google.script.run.showExitForm()">Registrar Saída</button>
+            <button onclick="google.script.run.showEstoqueForm()">Registrar Estoque</button>
+            <button onclick="google.script.run.showSalesForm()">Registrar Venda</button>
+            <button onclick="google.script.run.showCorretorForm()">Cadastrar Corretor</button>
+            <button onclick="google.script.run.showGerenteForm()">Cadastrar Gerente</button>
+            <button onclick="google.script.run.showTipoForm()">Cadastrar Tipo</button>
+            <button onclick="google.script.run.showBairroForm()">Cadastrar Bairro</button>
+        </div>
     </div>
-
-    <script>
-        function showForm(formUrl) {
-            const formWindow = window.open(formUrl, 'formWindow', 'width=900,height=400');
-            formWindow.onblur = function() {
-                formWindow.close();
-            };
-        }
-    </script>
 </body>
 </html>

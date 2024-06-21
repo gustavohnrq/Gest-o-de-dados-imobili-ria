@@ -4,297 +4,367 @@
     <title>Registro de Vendas</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-            color: #333;
+            margin: 0;
+            padding: 0;
+            font-family: Roboto, Arial, sans-serif;
+            background: linear-gradient(120deg, #FAC80B, #DC2963);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
         }
-        h1 {
+        .center {
+            width: 80vw; /* Ajuste conforme necessário */
+            max-width: 800px; /* Limite de largura máxima */
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        .center h1 {
+            text-align: center;
+            padding: 0 0 20px 0;
+            border-bottom: 1px solid silver;
             color: #007BFF;
         }
         form {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 0 40px;
+            box-sizing: border-box;
+            overflow-y: auto; /* Adicione isso para permitir a rolagem */
+            max-height: 60vh; /* Limite a altura do formulário */
         }
-        div {
-            margin-bottom: 10px;
+        .txt_field {
+            position: relative;
+            margin: 30px 0;
         }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input[type="text"], input[type="date"], input[type="number"], select {
+        .txt_field input, .txt_field select, .txt_field textarea {
             width: 100%;
-            padding: 8px;
-            border-radius: 4px;
+            padding: 10px 5px;
+            font-size: 16px;
             border: 1px solid #ccc;
-        }
-        button {
-            background-color: #007BFF;
-            color: white;
-            padding: 10px 20px;
-            border: none;
             border-radius: 4px;
-            cursor: pointer;
+            background: none;
+            outline: none;
+            box-sizing: border-box;
+        }
+        .txt_field input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        .txt_field label {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            color: #adadad;
+            transform: translateY(-50%);
+            font-size: 16px;
+            pointer-events: none;
+            transition: .5s;
+        }
+        .txt_field input:focus ~ label,
+        .txt_field input:valid ~ label,
+        .txt_field select:focus ~ label,
+        .txt_field select:valid ~ label,
+        .txt_field textarea:focus ~ label,
+        .txt_field textarea:valid ~ label,
+        .txt_field input[type="date"]:focus ~ label,
+        .txt_field input[type="date"]:valid ~ label {
+            top: -20px;
+            left: 5px;
+            color: #007BFF;
+            font-size: 12px;
+            background: white;
+            padding: 0 5px;
+        }
+        .txt_field input[type="date"] {
+            padding-right: 5px; /* Ajuste para o campo de data */
+        }
+        .txt_field select:not(:focus):not(:valid) + label,
+        .txt_field input[type="date"]:not(:focus):not(:valid) + label {
+            top: 10px;
+            left: 10px;
+            color: #adadad;
             font-size: 16px;
         }
-        button:hover {
-            background-color: #0056b3;
+        input[type="submit"], button {
+            width: 100%;
+            height: 50px;
+            border: 1px solid;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            background-color: #38B24A;
+            color: white;
+            transition: .5s;
+            margin-top: 10px;
+        }
+        input[type="submit"]:hover, button:hover {
+            background: #2d8f39;
+            color: #e9f4fb;
         }
         .btn-primary {
             width: 100%;
             margin-top: 10px;
-            background-color: #007BFF;
+            background-color: #9B74B1;
+            color: white;
+            padding: 10px 0;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
         .btn-primary:hover {
-            background-color: #0056b3;
+            background-color: #7c5a92;
         }
     </style>
 </head>
 <body>
-    
-    <form id="formVendas">
-        <div>
-            <label for="san">SAN:</label>
-            <input type="text" id="san" name="san" required>
-        </div>
-        <div>
-            <label for="dataVenda">Data da Venda:</label>
-            <input type="date" id="dataVenda" name="dataVenda" required>
-        </div>
-        <div>
-            <label for="bairro">Bairro:</label>
-            <select id="bairro" name="bairro" required>
-                <option value="">Selecione um Bairro</option>
-            </select>
-        </div>
-        <div>
-            <label for="quadra">Quadra:</label>
-            <input type="text" id="quadra" name="quadra" required>
-        </div>
-        <div>
-            <label for="tipo">Tipo:</label>
-            <select id="tipo" name="tipo" required>
-                <option value="">Selecione um Tipo</option>
-            </select>
-        </div>
-        <div>
-            <label for="focoPP">Foco PP:</label>
-            <input type="checkbox" id="focoPP" name="focoPP">
-        </div>
-        <div>
-            <label for="focoAC">Foco AC:</label>
-            <input type="checkbox" id="focoAC" name="focoAC">
-        </div>
-        <div>
-            <label for="valorNegocio">Valor do Negócio:</label>
-            <input type="number" id="valorNegocio" name="valorNegocio" required step="0.01">
-        </div>
-        <div>
-            <label for="valorComissao">Valor da Comissão:</label>
-            <input type="number" id="valorComissao" name="valorComissao" required step="0.01">
-        </div>
-        <div>
-            <label for="valorTotal61">Valor Total 61:</label>
-            <input type="number" id="valorTotal61" name="valorTotal61" required step="0.01">
-        </div>
-        <div>
-            <label for="vendedor1">Vendedor 1:</label>
-            <select id="vendedor1" name="vendedor1" required></select>
-        </div>
-        <div>
-            <label for="imobiliaria">Imobiliária:</label>
-            <select id="imobiliaria" name="imobiliaria" required></select>
-        </div>
-        <div>
-            <label for="porcentagemVendedor1">% Vendedor 1:</label>
-            <input type="number" id="porcentagemVendedor1" name="porcentagemVendedor1" required step="0.01">
-        </div>
-        <div>
-            <label for="gerenteVenda1">Gerente de Venda 1:</label>
-            <select id="gerenteVenda1" name="gerenteVenda1" required></select>
-        </div>
-        <div>
-            <label for="porcentagemGerenteVenda1">% Gerente de Venda 1:</label>
-            <input type="number" id="porcentagemGerenteVenda1" name="porcentagemGerenteVenda1" required step="0.01">
-        </div>
-        <div>
-            <label for="vendedor2">Vendedor 2:</label>
-            <select id="vendedor2" name="vendedor2"></select>
-        </div>
-        <div>
-            <label for="porcentagemVendedor2">% Vendedor 2:</label>
-            <input type="number" id="porcentagemVendedor2" name="porcentagemVendedor2" step="0.01">
-        </div>
-        <div>
-            <label for="gerenteVenda2">Gerente de Venda 2:</label>
-            <select id="gerenteVenda2" name="gerenteVenda2"></select>
-        </div>
-        <div>
-            <label for="porcentagemGerenteVenda2">% Gerente de Venda 2:</label>
-            <input type="number" id="porcentagemGerenteVenda2" name="porcentagemGerenteVenda2" step="0.01">
-        </div>
-        <div>
-            <label for="captador1">Captador 1:</label>
-            <select id="captador1" name="captador1" required></select>
-        </div>
-        <div>
-            <label for="porcentagemCaptador1">% Captador 1:</label>
-            <input type="number" id="porcentagemCaptador1" name="porcentagemCaptador1" required step="0.01">
-        </div>
-        <div>
-            <label for="gerenteCaptacao1">Gerente de Captação 1:</label>
-            <select id="gerenteCaptacao1" name="gerenteCaptacao1" required></select>
-        </div>
-        <div>
-            <label for="porcentagemGerenteCaptacao1">% Gerente de Captação 1:</label>
-            <input type="number" id="porcentagemGerenteCaptacao1" name="porcentagemGerenteCaptacao1" required step="0.01">
-        </div>
-        <div>
-            <label for="captador2">Captador 2:</label>
-            <select id="captador2" name="captador2"></select>
-        </div>
-        <div>
-            <label for="porcentagemCaptador2">% Captador 2:</label>
-            <input type="number" id="porcentagemCaptador2" name="porcentagemCaptador2" step="0.01">
-        </div>
-        <div>
-            <label for="gerenteCaptacao2">Gerente de Captação 2:</label>
-            <select id="gerenteCaptacao2" name="gerenteCaptacao2"></select>
-        </div>
-        <div>
-            <label for="porcentagemGerenteCaptacao2">% Gerente de Captação 2:</label>
-            <input type="number" id="porcentagemGerenteCaptacao2" name="porcentagemGerenteCaptacao2" step="0.01">
-        </div>
-        <div>
-            <label for="origemLeadVenda">Origem do Lead da Venda:</label>
-            <input type="text" id="origemLeadVenda" name="origemLeadVenda" required>
-        </div>
-        <div>
-            <label for="entradaLead">Entrada do Lead:</label>
-            <input type="date" id="entradaLead" name="entradaLead" required>
-        </div>
-        <button type="button" onclick="submitForm()">Enviar</button>
-    </form>
-    <button class="btn-primary" onclick="google.script.run.showMainMenu()">Menu Principal</button>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    google.script.run.withSuccessHandler(function(data) {
-        window.corretoresData = data;
-        buildDropdowns(data);
-    }).getCorretoresComGerentes();
-    google.script.run.withSuccessHandler(loadOptions).getOptions();
-});
-
-function buildDropdowns(data) {
-    populateDropdown('vendedor1', data, 'Selecionar Corretor');
-    populateDropdown('vendedor2', data, 'Selecionar Corretor');
-    populateDropdown('captador1', data, 'Selecionar Corretor');
-    populateDropdown('captador2', data, 'Selecionar Corretor');
-
-    document.getElementById('vendedor1').onchange = () => updateManagerSelect('vendedor1', window.corretoresData);
-    document.getElementById('vendedor2').onchange = () => updateManagerSelect('vendedor2', window.corretoresData);
-    document.getElementById('captador1').onchange = () => updateManagerSelect('captador1', window.corretoresData);
-    document.getElementById('captador2').onchange = () => updateManagerSelect('captador2', window.corretoresData);
-}
-
-function populateDropdown(elementId, options, placeholder = 'Selecionar') {
-    const select = document.getElementById(elementId);
-    select.innerHTML = `<option value="">${placeholder}</option>`;
-    options.forEach(option => {
-        const opt = document.createElement('option');
-        opt.value = option.id;
-        opt.textContent = option.nome;
-        select.appendChild(opt);
-    });
-}
-
-function updateManagerSelect(corretorId, allData) {
-    const selectedCorretor = document.getElementById(corretorId).value;
-    const managerSelectId = corretorId.includes('vendedor') ?
-                            corretorId.replace('vendedor', 'gerenteVenda') :
-                            corretorId.replace('captador', 'gerenteCaptacao');
-    const managerSelect = document.getElementById(managerSelectId);
-    managerSelect.innerHTML = '<option value="">Selecionar Gerente</option>';
-
-    const managerData = allData.find(item => item.id === selectedCorretor);
-    if (managerData && managerData.nomeGerente) {
-        const opt = document.createElement('option');
-        opt.value = managerData.idGerente;
-        opt.textContent = managerData.nomeGerente;
-        managerSelect.appendChild(opt);
-        managerSelect.value = managerData.idGerente;
-    }
-}
-
-function loadOptions() {
-    google.script.run.withSuccessHandler(function(options) {
-        const tipoSelect = document.getElementById('tipo');
-        tipoSelect.innerHTML = '<option value="">Selecione um Tipo</option>';
-        options.tipos.forEach(function(tipo) {
-            const opt = document.createElement('option');
-            opt.value = tipo.id;
-            opt.text = tipo.nome;
-            tipoSelect.add(opt);
+    <div class="center">
+        
+        <form id="formVendas">
+            <div class="txt_field">
+                <input type="text" id="san" name="san" required>
+                <label for="san">SAN</label>
+            </div>
+            <div class="txt_field">
+                <input type="date" id="dataVenda" name="dataVenda" required>
+                <label for="dataVenda">Data da Venda</label>
+            </div>
+            <div class="txt_field">
+                <select id="bairro" name="bairro" required>
+                    <option value=""></option>
+                </select>
+                <label for="bairro">Bairro</label>
+            </div>
+            <div class="txt_field">
+                <input type="text" id="quadra" name="quadra" required>
+                <label for="quadra">Quadra</label>
+            </div>
+            <div class="txt_field">
+                <select id="tipo" name="tipo" required>
+                    <option value=""></option>
+                </select>
+                <label for="tipo">Tipo</label>
+            </div>
+            <div class="txt_field" style="display: flex; align-items: center;">
+                <input type="checkbox" id="focoPP" name="focoPP">
+                <label for="focoPP" style="position: static; transform: none; margin-left: 10px;">Foco PP</label>
+            </div>
+            <div class="txt_field" style="display: flex; align-items: center;">
+                <input type="checkbox" id="focoAC" name="focoAC">
+                <label for="focoAC" style="position: static; transform: none; margin-left: 10px;">Foco AC</label>
+            </div>
+            <div class="txt_field">
+                <input type="number" id="valorNegocio" name="valorNegocio" required step="0.01">
+                <label for="valorNegocio">Valor do Negócio</label>
+            </div>
+            <div class="txt_field">
+                <input type="number" id="valorComissao" name="valorComissao" required step="0.01">
+                <label for="valorComissao">Valor da Comissão</label>
+            </div>
+            <div class="txt_field">
+                <input type="number" id="valorTotal61" name="valorTotal61" required step="0.01">
+                <label for="valorTotal61">Valor Total 61</label>
+            </div>
+            <div class="txt_field">
+                <select id="vendedor1" name="vendedor1" required></select>
+                <label for="vendedor1">Vendedor 1</label>
+            </div>
+            <div class="txt_field">
+                <select id="imobiliaria" name="imobiliaria" required></select>
+                <label for="imobiliaria">Imobiliária</label>
+            </div>
+            <div class="txt_field">
+                <input type="number" id="porcentagemVendedor1" name="porcentagemVendedor1" required step="0.01">
+                <label for="porcentagemVendedor1">% Vendedor 1</label>
+            </div>
+            <div class="txt_field">
+                <select id="gerenteVenda1" name="gerenteVenda1" required></select>
+                <label for="gerenteVenda1">Gerente de Venda 1</label>
+            </div>
+            <div class="txt_field">
+                <input type="number" id="porcentagemGerenteVenda1" name="porcentagemGerenteVenda1" required step="0.01">
+                <label for="porcentagemGerenteVenda1">% Gerente de Venda 1</label>
+            </div>
+            <div class="txt_field">
+                <select id="vendedor2" name="vendedor2"></select>
+                <label for="vendedor2">Vendedor 2</label>
+            </div>
+            <div class="txt_field">
+                <input type="number" id="porcentagemVendedor2" name="porcentagemVendedor2" step="0.01">
+                <label for="porcentagemVendedor2">% Vendedor 2</label>
+            </div>
+            <div class="txt_field">
+                <select id="gerenteVenda2" name="gerenteVenda2"></select>
+                <label for="gerenteVenda2">Gerente de Venda 2</label>
+            </div>
+            <div class="txt_field">
+                <input type="number" id="porcentagemGerenteVenda2" name="porcentagemGerenteVenda2" step="0.01">
+                <label for="porcentagemGerenteVenda2">% Gerente de Venda 2</label>
+            </div>
+            <div class="txt_field">
+                <select id="captador1" name="captador1" required></select>
+                <label for="captador1">Captador 1</label>
+            </div>
+            <div class="txt_field">
+                <input type="number" id="porcentagemCaptador1" name="porcentagemCaptador1" required step="0.01">
+                <label for="porcentagemCaptador1">% Captador 1</label>
+            </div>
+            <div class="txt_field">
+                <select id="gerenteCaptacao1" name="gerenteCaptacao1" required></select>
+                <label for="gerenteCaptacao1">Gerente de Captação 1</label>
+            </div>
+            <div class="txt_field">
+                <input type="number" id="porcentagemGerenteCaptacao1" name="porcentagemGerenteCaptacao1" required step="0.01">
+                <label for="porcentagemGerenteCaptacao1">% Gerente de Captação 1</label>
+            </div>
+            <div class="txt_field">
+                <select id="captador2" name="captador2"></select>
+                <label for="captador2">Captador 2</label>
+            </div>
+            <div class="txt_field">
+                <input type="number" id="porcentagemCaptador2" name="porcentagemCaptador2" step="0.01">
+                <label for="porcentagemCaptador2">% Captador 2</label>
+            </div>
+            <div class="txt_field">
+                <select id="gerenteCaptacao2" name="gerenteCaptacao2"></select>
+                <label for="gerenteCaptacao2">Gerente de Captação 2</label>
+            </div>
+            <div class="txt_field">
+                <input type="number" id="porcentagemGerenteCaptacao2" name="porcentagemGerenteCaptacao2" step="0.01">
+                <label for="porcentagemGerenteCaptacao2">% Gerente de Captação 2</label>
+            </div>
+            <div class="txt_field">
+                <input type="text" id="origemLeadVenda" name="origemLeadVenda" required>
+                <label for="origemLeadVenda">Origem do Lead da Venda</label>
+            </div>
+            <div class="txt_field">
+                <input type="date" id="entradaLead" name="entradaLead" required>
+                <label for="entradaLead">Entrada do Lead</label>
+            </div>
+            <input type="submit" value="Enviar" onclick="submitForm()">
+        </form>
+        <button class="btn-primary" onclick="google.script.run.showMainMenu()">Menu Principal</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            google.script.run.withSuccessHandler(function(data) {
+                window.corretoresData = data;
+                buildDropdowns(data);
+            }).getCorretoresComGerentes();
+            google.script.run.withSuccessHandler(loadOptions).getOptions();
         });
 
-        const bairroSelect = document.getElementById('bairro');
-        bairroSelect.innerHTML = '<option value="">Selecione um Bairro</option>';
-        options.bairros.forEach(function(bairro) {
-            const opt = document.createElement('option');
-            opt.value = bairro.id;
-            opt.text = bairro.nome;
-            bairroSelect.add(opt);
+        function buildDropdowns(data) {
+            populateDropdown('vendedor1', data, 'Selecionar Corretor');
+            populateDropdown('vendedor2', data, 'Selecionar Corretor');
+            populateDropdown('captador1', data, 'Selecionar Corretor');
+            populateDropdown('captador2', data, 'Selecionar Corretor');
+
+            document.getElementById('vendedor1').onchange = () => updateManagerSelect('vendedor1', window.corretoresData);
+            document.getElementById('vendedor2').onchange = () => updateManagerSelect('vendedor2', window.corretoresData);
+            document.getElementById('captador1').onchange = () => updateManagerSelect('captador1', window.corretoresData);
+            document.getElementById('captador2').onchange = () => updateManagerSelect('captador2', window.corretoresData);
+        }
+
+        function populateDropdown(elementId, options, placeholder = 'Selecionar') {
+            const select = document.getElementById(elementId);
+            select.innerHTML = `<option value="">${placeholder}</option>`;
+            options.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option.id;
+                opt.textContent = option.nome;
+                select.appendChild(opt);
+            });
+        }
+
+        function updateManagerSelect(corretorId, allData) {
+            const selectedCorretor = document.getElementById(corretorId).value;
+            const managerSelectId = corretorId.includes('vendedor') ?
+                                    corretorId.replace('vendedor', 'gerenteVenda') :
+                                    corretorId.replace('captador', 'gerenteCaptacao');
+            const managerSelect = document.getElementById(managerSelectId);
+            managerSelect.innerHTML = '<option value="">Selecionar Gerente</option>';
+
+            const managerData = allData.find(item => item.id === selectedCorretor);
+            if (managerData && managerData.nomeGerente) {
+                const opt = document.createElement('option');
+                opt.value = managerData.idGerente;
+                opt.textContent = managerData.nomeGerente;
+                managerSelect.appendChild(opt);
+                managerSelect.value = managerData.idGerente;
+            }
+        }
+
+        function loadOptions() {
+            google.script.run.withSuccessHandler(function(options) {
+                const tipoSelect = document.getElementById('tipo');
+                tipoSelect.innerHTML = '<option value=""></option>';
+                options.tipos.forEach(function(tipo) {
+                    const opt = document.createElement('option');
+                    opt.value = tipo.id;
+                    opt.text = tipo.nome;
+                    tipoSelect.add(opt);
+                });
+
+                const bairroSelect = document.getElementById('bairro');
+                bairroSelect.innerHTML = '<option value=""></option>';
+                options.bairros.forEach(function(bairro) {
+                    const opt = document.createElement('option');
+                    opt.value = bairro.id;
+                    opt.text = bairro.nome;
+                    bairroSelect.add(opt);
+                });
+            }).getOptions();
+        }
+
+        function submitForm() {
+            const form = document.getElementById('formVendas');
+            google.script.run.withSuccessHandler(function(response) {
+                alert('Formulário enviado com sucesso!');
+                form.reset();
+            }).withFailureHandler(function(error) {
+                alert('Erro ao enviar formulário: ' + error);
+            }).submitSalesData({
+                san: form.san.value,
+                dataVenda: form.dataVenda.value,
+                bairro: form.bairro.value,
+                quadra: form.quadra.value,
+                tipo: form.tipo.value,
+                focoPP: form.focoPP.checked ? 'TRUE' : 'FALSE',
+                focoAC: form.focoAC.checked ? 'TRUE' : 'FALSE',
+                valorNegocio: parseFloat(form.valorNegocio.value),
+                valorComissao: parseFloat(form.valorComissao.value),
+                valorTotal61: parseFloat(form.valorTotal61.value),
+                vendedor1: form.vendedor1.value,
+                imobiliaria: form.imobiliaria.value,
+                porcentagemVendedor1: parseFloat(form.porcentagemVendedor1.value),
+                gerenteVenda1: form.gerenteVenda1.value,
+                porcentagemGerenteVenda1: parseFloat(form.porcentagemGerenteVenda1.value),
+                vendedor2: form.vendedor2.value,
+                porcentagemVendedor2: parseFloat(form.porcentagemVendedor2.value),
+                gerenteVenda2: form.gerenteVenda2.value,
+                porcentagemGerenteVenda2: parseFloat(form.porcentagemGerenteVenda2.value),
+                captador1: form.captador1.value,
+                porcentagemCaptador1: parseFloat(form.porcentagemCaptador1.value),
+                gerenteCaptacao1: form.gerenteCaptacao1.value,
+                porcentagemGerenteCaptacao1: parseFloat(form.porcentagemGerenteCaptacao1.value),
+                captador2: form.captador2.value,
+                porcentagemCaptador2: parseFloat(form.porcentagemCaptador2.value),
+                gerenteCaptacao2: form.gerenteCaptacao2.value,
+                porcentagemGerenteCaptacao2: parseFloat(form.porcentagemGerenteCaptacao2.value),
+                origemLeadVenda: form.origemLeadVenda.value,
+                entradaLead: form.entradaLead.value
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOptions();
         });
-    }).getOptions();
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    loadOptions();
-});
-
-function submitForm() {
-    const form = document.getElementById('formVendas');
-    google.script.run.withSuccessHandler(function(response) {
-        alert('Formulário enviado com sucesso!');
-        form.reset();
-    }).withFailureHandler(function(error) {
-        alert('Erro ao enviar formulário: ' + error);
-    }).submitSalesData({
-        san: form.san.value,
-        dataVenda: form.dataVenda.value,
-        bairro: form.bairro.value,
-        quadra: form.quadra.value,
-        tipo: form.tipo.value,
-        focoPP: form.focoPP.checked ? 'TRUE' : 'FALSE',
-        focoAC: form.focoAC.checked ? 'TRUE' : 'FALSE',
-        valorNegocio: parseFloat(form.valorNegocio.value),
-        valorComissao: parseFloat(form.valorComissao.value),
-        valorTotal61: parseFloat(form.valorTotal61.value),
-        vendedor1: form.vendedor1.value,
-        imobiliaria: form.imobiliaria.value,
-        porcentagemVendedor1: parseFloat(form.porcentagemVendedor1.value),
-        gerenteVenda1: form.gerenteVenda1.value,
-        porcentagemGerenteVenda1: parseFloat(form.porcentagemGerenteVenda1.value),
-        vendedor2: form.vendedor2.value,
-        porcentagemVendedor2: parseFloat(form.porcentagemVendedor2.value),
-        gerenteVenda2: form.gerenteVenda2.value,
-        porcentagemGerenteVenda2: parseFloat(form.porcentagemGerenteVenda2.value),
-        captador1: form.captador1.value,
-        porcentagemCaptador1: parseFloat(form.porcentagemCaptador1.value),
-        gerenteCaptacao1: form.gerenteCaptacao1.value,
-        porcentagemGerenteCaptacao1: parseFloat(form.porcentagemGerenteCaptacao1.value),
-        captador2: form.captador2.value,
-        porcentagemCaptador2: parseFloat(form.porcentagemCaptador2.value),
-        gerenteCaptacao2: form.gerenteCaptacao2.value,
-        porcentagemGerenteCaptacao2: parseFloat(form.porcentagemGerenteCaptacao2.value),
-        origemLeadVenda: form.origemLeadVenda.value,
-        entradaLead: form.entradaLead.value
-    });
-}
-</script>
+    </script>
 </body>
 </html>
-

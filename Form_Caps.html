@@ -4,214 +4,277 @@
     <title>Registro de Captações</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-            color: #333;
+            margin: 0;
+            padding: 0;
+            font-family: Roboto, Arial, sans-serif;
+            background: linear-gradient(120deg, #FAC80B, #DC2963);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
         }
-        h1 {
+        .center {
+            width: 80vw; /* Ajuste conforme necessário */
+            max-width: 800px; /* Limite de largura máxima */
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        .center h1 {
+            text-align: center;
+            padding: 0 0 20px 0;
+            border-bottom: 1px solid silver;
             color: #007BFF;
         }
         form {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 0 40px;
+            box-sizing: border-box;
+            overflow-y: auto; /* Adicione isso para permitir a rolagem */
+            max-height: 60vh; /* Limite a altura do formulário */
         }
-        div {
-            margin-bottom: 10px;
+        .txt_field {
+            position: relative;
+            margin: 30px 0;
         }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input[type="number"], input[type="date"], input[type="text"], select {
+        .txt_field input, .txt_field select {
             width: 100%;
-            padding: 8px;
-            border-radius: 4px;
+            padding: 10px 5px;
+            font-size: 16px;
             border: 1px solid #ccc;
-        }
-        button {
-            background-color: #007BFF;
-            color: white;
-            padding: 10px 20px;
-            border: none;
             border-radius: 4px;
-            cursor: pointer;
+            background: none;
+            outline: none;
+            box-sizing: border-box;
+        }
+        .txt_field input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        .txt_field label {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            color: #adadad;
+            transform: translateY(-50%);
+            font-size: 16px;
+            pointer-events: none;
+            transition: .5s;
+        }
+        .txt_field input:focus ~ label,
+        .txt_field input:valid ~ label,
+        .txt_field select:focus ~ label,
+        .txt_field select:valid ~ label,
+        .txt_field input[type="date"]:focus ~ label,
+        .txt_field input[type="date"]:valid ~ label {
+            top: -20px;
+            left: 5px;
+            color: #007BFF;
+            font-size: 12px;
+            background: white;
+            padding: 0 5px;
+        }
+        .txt_field input[type="date"] {
+            padding-right: 5px; /* Ajuste para o campo de data */
+        }
+        .txt_field select:not(:focus):not(:valid) + label,
+        .txt_field input[type="date"]:not(:focus):not(:valid) + label {
+            top: 10px;
+            left: 10px;
+            color: #adadad;
             font-size: 16px;
         }
-        button:hover {
-            background-color: #0056b3;
+        input[type="submit"], button {
+            width: 100%;
+            height: 50px;
+            border: 1px solid;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            background-color: #38B24A;
+            color: white;
+            transition: .5s;
+            margin-top: 10px;
         }
-      
+        input[type="submit"]:hover, button:hover {
+            background: #2d8f39;
+            color: #e9f4fb;
+        }
         .btn-primary {
             width: 100%;
             margin-top: 10px;
-            background-color: #007BFF;
+            background-color: #9B74B1;
+            color: white;
+            padding: 10px 0;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
         .btn-primary:hover {
-            background-color: #0056b3;
+            background-color: #7c5a92;
         }
     </style>
 </head>
-
 <body>
-    
-    <form id="formCaptacao">
-        <div>
-            <label for="codigo">Código:</label>
-            <input type="number" id="codigo" name="codigo" required>
-        </div>
-        <div>
-            <label for="captador1">Captador 1:</label>
-            <select id="captador1" name="captador1" required onchange="updateManager()"></select>
-        </div>
-        <div>
-            <label for="captador2">Captador 2:</label>
-            <select id="captador2" name="captador2" onchange="updateManager()"></select>
-        </div>
-        <div>
-            <label for="captador3">Captador 3:</label>
-            <select id="captador3" name="captador3" onchange="updateManager()"></select>
-        </div>
-        <div>
-            <label for="gerente">Gerente:</label>
-            <input type="text" id="gerente" name="gerente" readonly>
-        </div>
-        <div>
-            <label for="dataEntrada">Data de Entrada:</label>
-            <input type="date" id="dataEntrada" name="dataEntrada" required>
-        </div>
+    <div class="center">
         
-        <div>
-            <label for="tipo">Tipo:</label>
-            <select id="tipo" name="tipo" required>
-                <option value="">Selecione um Tipo</option>
-            </select>
-        </div>
+        <form id="formCaptacao">
+            <div class="txt_field">
+                <input type="number" id="codigo" name="codigo" required>
+                <label for="codigo">Código</label>
+            </div>
+            <div class="txt_field">
+                <select id="captador1" name="captador1" required onchange="updateManager()">
+                    <option value=""></option>
+                </select>
+                <label for="captador1">Captador 1</label>
+            </div>
+            <div class="txt_field">
+                <select id="captador2" name="captador2" onchange="updateManager()">
+                    <option value=""></option>
+                </select>
+                <label for="captador2">Captador 2</label>
+            </div>
+            <div class="txt_field">
+                <select id="captador3" name="captador3" onchange="updateManager()">
+                    <option value=""></option>
+                </select>
+                <label for="captador3">Captador 3</label>
+            </div>
+            <div class="txt_field">
+                <input type="text" id="gerente" name="gerente" readonly>
+                <label for="gerente">Gerente</label>
+            </div>
+            <div class="txt_field">
+                <input type="date" id="dataEntrada" name="dataEntrada" required>
+                <label for="dataEntrada">Data de Entrada</label>
+            </div>
+            <div class="txt_field">
+                <select id="tipo" name="tipo" required>
+                    <option value=""></option>
+                </select>
+                <label for="tipo">Tipo</label>
+            </div>
+            <div class="txt_field">
+                <input type="number" id="valor" name="valor" required step="0.01">
+                <label for="valor">Valor</label>
+            </div>
+            <div class="txt_field">
+                <select id="bairro" name="bairro" required>
+                    <option value=""></option>
+                </select>
+                <label for="bairro">Bairro</label>
+            </div>
+            <div class="txt_field" style="display: flex; align-items: center;">
+                <input type="checkbox" id="focoPP" name="focoPP">
+                <label for="focoPP" style="position: static; transform: none; margin-left: 10px;">Foco PP</label>
+            </div>
+            <div class="txt_field" style="display: flex; align-items: center;">
+                <input type="checkbox" id="focoAC" name="focoAC">
+                <label for="focoAC" style="position: static; transform: none; margin-left: 10px;">Foco AC</label>
+            </div>
+            <input type="submit" value="Enviar" onclick="submitForm()">
+        </form>
+        <button class="btn-primary" onclick="google.script.run.showMainMenu()">Menu Principal</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            google.script.run.withSuccessHandler(buildDropdowns).getCaptadores();
+            google.script.run.withSuccessHandler(buildBairroDropdown).getBairros();
+            google.script.run.withSuccessHandler(loadOptions).getOptions();
+        });
 
-        <div>
-            <label for="valor">Valor:</label>
-            <input type="number" id="valor" name="valor" required step="0.01">
-        </div>
-        <div>
-            <label for="bairro">Bairro:</label>
-            <select id="bairro" name="bairro" required>
-                <option value="">Selecione um Bairro</option>
-            </select>
-        </div>
+        function buildDropdowns(data) {
+            const captadores = ['captador1', 'captador2', 'captador3'];
+            captadores.forEach(function(id) {
+                let select = document.getElementById(id);
+                select.innerHTML = '<option value=""></option>';
+                data.forEach(function(item) {
+                    let option = document.createElement('option');
+                    option.text = item.Nome;
+                    option.value = item.IdCorretor;
+                    select.appendChild(option);
+                });
+            });
+        }
 
-        <div>
-            <label for="focoPP">Foco PP:</label>
-            <input type="checkbox" id="focoPP" name="focoPP">
-        </div>
-        <div>
-            <label for="focoAC">Foco AC:</label>
-            <input type="checkbox" id="focoAC" name="focoAC">
-        </div>
-        <button type="button" onclick="submitForm()">Enviar</button>
-    </form>
-    <button class="btn-primary" onclick="google.script.run.showMainMenu()">Menu Principal</button>
-
-<script>
-    // Função chamada quando o documento é completamente carregado.
-    document.addEventListener('DOMContentLoaded', function() {
-        google.script.run.withSuccessHandler(buildDropdowns).getCaptadores();
-        google.script.run.withSuccessHandler(buildBairroDropdown).getBairros();
-        google.script.run.withSuccessHandler(loadOptions).getOptions();
-    });
-
-    // Constrói o dropdown de captadores e atualiza os valores dos captadores baseado nos dados recebidos.
-    function buildDropdowns(data) {
-        const captadores = ['captador1', 'captador2', 'captador3'];
-        captadores.forEach(function(id) {
-            let select = document.getElementById(id);
-            select.innerHTML = '<option value="">Selecione um captador</option>';
-            data.forEach(function(item) {
-                let option = document.createElement('option');
-                option.text = item.Nome;
-                option.value = item.IdCorretor;
+        function buildBairroDropdown(bairros) {
+            var select = document.getElementById('bairro');
+            select.innerHTML = '<option value=""></option>';
+            bairros.forEach(function(bairro) {
+                var option = document.createElement('option');
+                option.text = bairro.nome;
+                option.value = bairro.id;
                 select.appendChild(option);
             });
-        });
-    }
+        }
 
-    // Constrói o dropdown de bairros e atualiza os valores dos bairros baseado nos dados recebidos.
-    function buildBairroDropdown(bairros) {
-        var select = document.getElementById('bairro');
-        select.innerHTML = '<option value="">Selecione um bairro</option>';
-        bairros.forEach(function(bairro) {
-            var option = document.createElement('option');
-            option.text = bairro.nome;
-            option.value = bairro.id;
-            select.appendChild(option);
-        });
-    }
-
-    // Atualiza o campo de gerente baseado na seleção do captador.
-    function updateManager() {
-        let captadores = ['captador1', 'captador2', 'captador3'];
-        captadores.forEach(function(id) {
-            let select = document.getElementById(id);
-            if (select.value) {
-                google.script.run.withSuccessHandler(function(managerName) {
-                    document.getElementById('gerente').value = managerName;
-                }).getManager(select.value);
-            }
-        });
-    }
-
-    // Envia os dados do formulário para o Google Apps Script para processamento.
-    function submitForm() {
-        const form = document.getElementById('formCaptacao');
-        const data = {
-            codigo: form.codigo.value,
-            tipo: form.tipo.value,
-            bairro: form.bairro.value,
-            captador1: form.captador1.value,
-            captador2: form.captador2.value,
-            captador3: form.captador3.value,
-            gerente: form.gerente.value,
-            dataEntrada: form.dataEntrada.value,
-            valor: form.valor.value,
-            focoPP: form.focoPP.checked,
-            focoAC: form.focoAC.checked
-        };
-        google.script.run.withSuccessHandler(() => {
-            alert('Captação registrada com sucesso!');
-            form.reset();
-            loadOptions(); // Recarregar opções após o reset
-        }).withFailureHandler((err) => {
-            alert('Falha ao registrar captação: ' + err.message);
-        }).submitData(data);
-    }
-
-    function loadOptions() {
-        google.script.run.withSuccessHandler(function(options) {
-            const tipoSelect = document.getElementById('tipo');
-            tipoSelect.innerHTML = '<option value="">Selecione um Tipo</option>';
-            options.tipos.forEach(function(tipo) {
-                const opt = document.createElement('option');
-                opt.value = tipo.id;
-                opt.text = tipo.nome;
-                tipoSelect.add(opt);
+        function updateManager() {
+            let captadores = ['captador1', 'captador2', 'captador3'];
+            captadores.forEach(function(id) {
+                let select = document.getElementById(id);
+                if (select.value) {
+                    google.script.run.withSuccessHandler(function(managerName) {
+                        document.getElementById('gerente').value = managerName;
+                    }).getManager(select.value);
+                }
             });
+        }
 
-            const bairroSelect = document.getElementById('bairro');
-            bairroSelect.innerHTML = '<option value="">Selecione um Bairro</option>';
-            options.bairros.forEach(function(bairro) {
-                const opt = document.createElement('option');
-                opt.value = bairro.id;
-                opt.text = bairro.nome;
-                bairroSelect.add(opt);
-            });
-        }).getOptions();
-    }
+        function submitForm() {
+            const form = document.getElementById('formCaptacao');
+            const data = {
+                codigo: form.codigo.value,
+                tipo: form.tipo.value,
+                bairro: form.bairro.value,
+                captador1: form.captador1.value,
+                captador2: form.captador2.value,
+                captador3: form.captador3.value,
+                gerente: form.gerente.value,
+                dataEntrada: form.dataEntrada.value,
+                valor: form.valor.value,
+                focoPP: form.focoPP.checked,
+                focoAC: form.focoAC.checked
+            };
+            google.script.run.withSuccessHandler(() => {
+                alert('Captação registrada com sucesso!');
+                form.reset();
+                loadOptions();
+            }).withFailureHandler((err) => {
+                alert('Falha ao registrar captação: ' + err.message);
+            }).submitData(data);
+        }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        loadOptions();
-    });
-</script>
+        function loadOptions() {
+            google.script.run.withSuccessHandler(function(options) {
+                const tipoSelect = document.getElementById('tipo');
+                tipoSelect.innerHTML = '<option value=""></option>';
+                options.tipos.forEach(function(tipo) {
+                    const opt = document.createElement('option');
+                    opt.value = tipo.id;
+                    opt.text = tipo.nome;
+                    tipoSelect.add(opt);
+                });
 
+                const bairroSelect = document.getElementById('bairro');
+                bairroSelect.innerHTML = '<option value=""></option>';
+                options.bairros.forEach(function(bairro) {
+                    const opt = document.createElement('option');
+                    opt.value = bairro.id;
+                    opt.text = bairro.nome;
+                    bairroSelect.add(opt);
+                });
+            }).getOptions();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOptions();
+        });
+    </script>
 </body>
 </html>
