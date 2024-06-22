@@ -428,3 +428,18 @@ Date.prototype.isValid = function () {
 };
 
 
+async function fetchCaptadores() {
+    const response = await fetch('/getCaptadores', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    const data = await response.json();
+    console.log(data);
+}
+
+// Chame fetchCaptadores quando necessário
+fetchCaptadores();
+
+
