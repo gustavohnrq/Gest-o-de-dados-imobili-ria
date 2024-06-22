@@ -1,27 +1,27 @@
 
 function showFormCaps() {
-    const html = HtmlService.createHtmlOutputFromFile('FormularioCaps')
+    const html = HtmlService.createHtmlOutputFromFile('Form_Caps')
         .setWidth(1280)
         .setHeight(720);
     SpreadsheetApp.getUi().showModalDialog(html, 'Registro de Captações');
 }
 
 function showExitForm() {
-    const html = HtmlService.createHtmlOutputFromFile('FormularioSaida')
+    const html = HtmlService.createHtmlOutputFromFile('Form_Saidas')
         .setWidth(1280)
         .setHeight(720);
     SpreadsheetApp.getUi().showModalDialog(html, 'Registro de Saídas');
 }
 
 function showSalesForm() {
-    const html = HtmlService.createHtmlOutputFromFile('FormularioVendas')
+    const html = HtmlService.createHtmlOutputFromFile('Form_Vendas')
         .setWidth(1280)
         .setHeight(720);
     SpreadsheetApp.getUi().showModalDialog(html, 'Registro de Vendas');
 }
 
 function showCorretorForm() {
-    const html = HtmlService.createHtmlOutputFromFile('FormularioCorretor')
+    const html = HtmlService.createHtmlOutputFromFile('Form_Corretor')
         .setWidth(1280)
         .setHeight(720);
     const nextId = getNextCorretorId();
@@ -38,7 +38,7 @@ function showCorretorForm() {
 }
 
 function showGerenteForm() {
-    const html = HtmlService.createHtmlOutputFromFile('FormularioGerente')
+    const html = HtmlService.createHtmlOutputFromFile('Form_Gerente')
         .setWidth(1280)
         .setHeight(720);
     const nextId = getNextGerenteId();
@@ -51,26 +51,25 @@ function showGerenteForm() {
 }
 
 function showEstoqueForm() {
-    const html = HtmlService.createHtmlOutputFromFile('FormularioEstoque')
+    const html = HtmlService.createHtmlOutputFromFile('Form_Estoque')
         .setWidth(1280)
         .setHeight(720);
     SpreadsheetApp.getUi().showModalDialog(html, 'Registrar Estoque');
 }
 
 function showTipoForm() {
-    const html = HtmlService.createHtmlOutputFromFile('FormularioTipo')
+    const html = HtmlService.createHtmlOutputFromFile('Form_Tipo')
         .setWidth(1280)
         .setHeight(720);
     SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Tipo');
 }
 
 function showBairroForm() {
-    const html = HtmlService.createHtmlOutputFromFile('FormularioBairro')
+    const html = HtmlService.createHtmlOutputFromFile('Form_Bairro')
         .setWidth(1280)
         .setHeight(720);
     SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Bairro');
 }
-
 
 
 function hideSheets(sheetNames) {
