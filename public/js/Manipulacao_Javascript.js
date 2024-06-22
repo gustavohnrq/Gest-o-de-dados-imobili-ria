@@ -1,72 +1,39 @@
-
 function showFormCaps() {
-    const html = HtmlService.createHtmlOutputFromFile('Form_Caps')
-        .setWidth(1280)
-        .setHeight(720);
-    SpreadsheetApp.getUi().showModalDialog(html, 'Registro de Captações');
+    window.location.href = '/Form_Caps';
 }
 
 function showExitForm() {
-    const html = HtmlService.createHtmlOutputFromFile('Form_Saidas')
-        .setWidth(1280)
-        .setHeight(720);
-    SpreadsheetApp.getUi().showModalDialog(html, 'Registro de Saídas');
-}
-
-function showSalesForm() {
-    const html = HtmlService.createHtmlOutputFromFile('Form_Vendas')
-        .setWidth(1280)
-        .setHeight(720);
-    SpreadsheetApp.getUi().showModalDialog(html, 'Registro de Vendas');
-}
-
-function showCorretorForm() {
-    const html = HtmlService.createHtmlOutputFromFile('Form_Corretor')
-        .setWidth(1280)
-        .setHeight(720);
-    const nextId = getNextCorretorId();
-    const gerentes = getGerentes();
-    const gerentesOptions = gerentes.map(g => `<option value="${g.id}">${g.nome}</option>`).join('');
-    html.append(`<script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('idCorretor').value = '${nextId}';
-            const gerenteSelect = document.getElementById('idGerente');
-            gerenteSelect.innerHTML = '<option value="">Selecionar Gerente</option>' + '${gerentesOptions}';
-        });
-    </script>`);
-    SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Corretor');
-}
-
-function showGerenteForm() {
-    const html = HtmlService.createHtmlOutputFromFile('Form_Gerente')
-        .setWidth(1280)
-        .setHeight(720);
-    const nextId = getNextGerenteId();
-    html.append(`<script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('idGerente').value = '${nextId}';
-        });
-    </script>`);
-    SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Gerente');
+    window.location.href = '/Form_Saidas';
 }
 
 function showEstoqueForm() {
-    window.location.href = 'Form_Estoque.html';
+    window.location.href = '/Form_Estoque';
+}
+
+function showSalesForm() {
+    window.location.href = '/Fomr_Vendas';
+}
+
+function showCorretorForm() {
+    window.location.href = '/Form_Corretor';
+}
+
+function showGerenteForm() {
+    window.location.href = '/Form_Gerente';
 }
 
 function showTipoForm() {
-    const html = HtmlService.createHtmlOutputFromFile('Form_Tipo')
-        .setWidth(1280)
-        .setHeight(720);
-    SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Tipo');
+    window.location.href = '/Form_Tipo';
 }
 
 function showBairroForm() {
-    const html = HtmlService.createHtmlOutputFromFile('Form_Bairro')
-        .setWidth(1280)
-        .setHeight(720);
-    SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Bairro');
+    window.location.href = '/Form_Bairro';
 }
+
+function showMainMenu() {
+    window.location.href = '/';
+}
+
 
 
 function hideSheets(sheetNames) {
