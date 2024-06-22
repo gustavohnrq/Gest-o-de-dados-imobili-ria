@@ -91,6 +91,11 @@ async function getCaptadores() {
     }
 }
 
+// Rota para a página principal
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'MenuPrincipal.html'));
+});
+
 // Rotas para as outras páginas
 app.get('/Form_Bairro', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Form_Bairro.html'));
