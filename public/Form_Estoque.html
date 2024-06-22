@@ -17,9 +17,9 @@
             border-radius: 20px;
             box-sizing: border-box;
             padding: 20px;
-            width: 85%; /* 60% of 1280px is 768px */
-            max-height: 90%; /* 80% of 720px is 576px */
-            overflow-y: auto; /* Allow scrolling if content overflows */
+            width: 85%;
+            max-height: 90%;
+            overflow-y: auto;
         }
         .title {
             color: #eee;
@@ -48,7 +48,7 @@
             width: 100%;
         }
         .input[type="file"] {
-            padding: 10px 0; /* Adjust padding for file input */
+            padding: 10px 0;
         }
         .cut {
             background-color: #15172b;
@@ -131,7 +131,7 @@
             <label for="fileUpload" class="placeholder">Escolha o arquivo .xlsx</label>
         </div>
         <button type="button" class="submit" onclick="uploadFile()">Upload</button>
-        <button type="button" class="btn-primary" onclick="google.script.run.showMainMenu()">Menu Principal</button>
+        <button type="button" class="btn-primary" onclick="showMainMenu()">Menu Principal</button>
     </form>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script>
@@ -146,16 +146,25 @@
                 const worksheet = workbook.Sheets[sheetName];
                 const json = XLSX.utils.sheet_to_json(worksheet, {header: 1});
                 
-                google.script.run.withSuccessHandler(function(response) {
-                    alert(response);
-                }).withFailureHandler(function(err) {
-                    alert('Erro: ' + err.message);
-                }).processFile(json);
+                fetch('/processFile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({data: json})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(error => {
+                    alert('Erro: ' + error.message);
+                });
             };
             reader.readAsArrayBuffer(file);
         }
 
-        function goBackToMenu() {
+        function showMainMenu() {
             window.location.href = 'MenuPrincipal.html';
         }
     </script>
