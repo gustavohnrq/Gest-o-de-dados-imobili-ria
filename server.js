@@ -9,10 +9,9 @@ const port = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
-// Carregar credenciais do Google API
-const credentials = JSON.parse(fs.readFileSync('credentials.json'));
-const { client_secret, client_id, redirect_uris } = credentials.installed;
-const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
+// Carregar credenciais do Google API das variáveis de ambiente
+const { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI } = process.env;
+const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 
 // Função para autenticar o cliente OAuth
 function authenticate() {
