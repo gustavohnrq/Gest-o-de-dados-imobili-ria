@@ -5,8 +5,6 @@ const { google } = require('googleapis');
 const app = express();
 const port = process.env.PORT || 3000;
 
-console.log('Iniciando o servidor...');
-
 // Middleware para servir arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
@@ -15,14 +13,11 @@ app.use(express.json());
 const { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI } = process.env;
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 
-console.log('Credenciais do OAuth2 carregadas...');
-
 // Função para autenticar o cliente OAuth
-function authenticate() {
+async function authenticate() {
     return new Promise((resolve, reject) => {
         fs.readFile('token.json', (err, token) => {
             if (err) {
-                console.log('Erro ao ler o token:', err);
                 return getAccessToken(oAuth2Client, resolve, reject);
             }
             oAuth2Client.setCredentials(JSON.parse(token));
@@ -45,13 +40,11 @@ function getAccessToken(oAuth2Client, resolve, reject) {
         rl.close();
         oAuth2Client.getToken(code, (err, token) => {
             if (err) {
-                console.log('Erro ao obter o token:', err);
                 return reject(err);
             }
             oAuth2Client.setCredentials(token);
             fs.writeFile('token.json', JSON.stringify(token), (err) => {
                 if (err) {
-                    console.log('Erro ao salvar o token:', err);
                     return reject(err);
                 }
                 resolve(oAuth2Client);
@@ -63,37 +56,109 @@ function getAccessToken(oAuth2Client, resolve, reject) {
 // Configure sua API de Rotas para Funções
 app.post('/getCaptadores', async (req, res) => {
     try {
-        const data = await getCaptadores();
-        res.json(data);
-    } catch (error) {
-        console.error('Erro ao obter captadores:', error);
-        res.status(500).send(error.message);
-    }
-});
-
-// Implementação de Funções
-async function getCaptadores() {
-    const auth = await authenticate();
-    const sheets = google.sheets({ version: 'v4', auth });
-    const response = await sheets.spreadsheets.values.get({
-        spreadsheetId: '1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw',
-        range: 'Dim_Corretor!A2:C'
-    });
-    const rows = response.data.values;
-    if (rows.length) {
-        return rows.map(row => ({
+        const auth = await authenticate();
+        const sheets = google.sheets({ version: 'v4', auth });
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: '1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw',
+            range: 'Dim_Corretor!A2:C'
+        });
+        const rows = response.data.values;
+        const captadores = rows.map(row => ({
             IdCorretor: row[0],
             Nome: row[1],
             IdGerente: row[2]
         }));
-    } else {
-        return [];
+        res.json(captadores);
+    } catch (error) {
+        res.status(500).send(error.message);
     }
-}
+});
 
-// Rota para a página principal
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'MenuPrincipal.html'));
+app.post('/getBairros', async (req, res) => {
+    try {
+        const auth = await authenticate();
+        const sheets = google.sheets({ version: 'v4', auth });
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: '1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw',
+            range: 'Dim_Bairro!A2:B'
+        });
+        const rows = response.data.values;
+        const bairros = rows.map(row => ({
+            id: row[0],
+            nome: row[1]
+        }));
+        res.json(bairros);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+app.post('/getOptions', async (req, res) => {
+    try {
+        const auth = await authenticate();
+        const sheets = google.sheets({ version: 'v4', auth });
+        const [tiposResponse, bairrosResponse] = await Promise.all([
+            sheets.spreadsheets.values.get({
+                spreadsheetId: '1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw',
+                range: 'Dim_Tipo!A2:B'
+            }),
+            sheets.spreadsheets.values.get({
+                spreadsheetId: '1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw',
+                range: 'Dim_Bairro!A2:B'
+            })
+        ]);
+        const tipos = tiposResponse.data.values.map(row => ({
+            id: row[0],
+            nome: row[1]
+        }));
+        const bairros = bairrosResponse.data.values.map(row => ({
+            id: row[0],
+            nome: row[1]
+        }));
+        res.json({ tipos, bairros });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+app.post('/getManager', async (req, res) => {
+    const { idCorretor } = req.query;
+    try {
+        const auth = await authenticate();
+        const sheets = google.sheets({ version: 'v4', auth });
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: '1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw',
+            range: 'Dim_Corretor!A2:C'
+        });
+        const rows = response.data.values;
+        const manager = rows.find(row => row[0] === idCorretor);
+        res.json(manager ? manager[2] : '');
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+app.post('/submitData', async (req, res) => {
+    const data = req.body;
+    try {
+        const auth = await authenticate();
+        const sheets = google.sheets({ version: 'v4', auth });
+        await sheets.spreadsheets.values.append({
+            spreadsheetId: '1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw',
+            range: 'Fato_Captacao!A2',
+            valueInputOption: 'RAW',
+            resource: {
+                values: [[
+                    data.codigo, data.captador1, data.captador2, data.captador3,
+                    data.gerente, data.dataEntrada, data.tipo, data.valor,
+                    data.bairro, data.focoPP, data.focoAC
+                ]]
+            }
+        });
+        res.json({ status: 'success' });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 });
 
 // Rotas para as outras páginas
@@ -127,6 +192,11 @@ app.get('/Form_Tipo', (req, res) => {
 
 app.get('/Fomr_Vendas', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Fomr_Vendas.html'));
+});
+
+// Rota para a página principal
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'MenuPrincipal.html'));
 });
 
 // Inicia o servidor

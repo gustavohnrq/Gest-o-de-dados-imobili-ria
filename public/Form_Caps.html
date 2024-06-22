@@ -186,14 +186,34 @@
             <input type="checkbox" id="focoAC" name="focoAC">
         </div>
         <button type="button" class="submit" onclick="submitForm()">Enviar</button>
-        <button type="button" class="btn-primary" onclick="google.script.run.showMainMenu()">Menu Principal</button>
+        <button type="button" class="btn-primary" onclick="showMainMenu()">Menu Principal</button>
     </form>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            google.script.run.withSuccessHandler(buildDropdowns).getCaptadores();
-            google.script.run.withSuccessHandler(buildBairroDropdown).getBairros();
-            google.script.run.withSuccessHandler(loadOptions).getOptions();
+            fetch('/getCaptadores', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+              .then(data => buildDropdowns(data));
+
+            fetch('/getBairros', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+              .then(data => buildBairroDropdown(data));
+
+            fetch('/getOptions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+              .then(data => loadOptions(data));
         });
 
         function buildDropdowns(data) {
@@ -226,9 +246,15 @@
             captadores.forEach(function(id) {
                 let select = document.getElementById(id);
                 if (select.value) {
-                    google.script.run.withSuccessHandler(function(managerName) {
-                        document.getElementById('gerente').value = managerName;
-                    }).getManager(select.value);
+                    fetch(`/getManager?idCorretor=${select.value}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(response => response.json())
+                      .then(managerName => {
+                          document.getElementById('gerente').value = managerName;
+                      });
                 }
             });
         }
@@ -248,17 +274,31 @@
                 focoPP: form.focoPP.checked,
                 focoAC: form.focoAC.checked
             };
-            google.script.run.withSuccessHandler(() => {
-                alert('Captação registrada com sucesso!');
-                form.reset();
-                loadOptions();
-            }).withFailureHandler((err) => {
-                alert('Falha ao registrar captação: ' + err.message);
-            }).submitData(data);
+
+            fetch('/submitData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json())
+              .then(() => {
+                  alert('Captação registrada com sucesso!');
+                  form.reset();
+                  loadOptions();
+              }).catch(err => {
+                  alert('Falha ao registrar captação: ' + err.message);
+              });
         }
 
         function loadOptions() {
-            google.script.run.withSuccessHandler(function(options) {
+            fetch('/getOptions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+              .then(options => {
                 const tipoSelect = document.getElementById('tipo');
                 tipoSelect.innerHTML = '<option value="">Selecione um Tipo</option>';
                 options.tipos.forEach(function(tipo) {
@@ -276,11 +316,11 @@
                     opt.text = bairro.nome;
                     bairroSelect.add(opt);
                 });
-            }).getOptions();
+            });
         }
 
-        function redirectToMainMenu() {
-            window.location.href = 'pagina-principal.html'; // Substitua pela URL desejada
+        function showMainMenu() {
+            window.location.href = '/';
         }
 
         document.addEventListener('DOMContentLoaded', function() {
