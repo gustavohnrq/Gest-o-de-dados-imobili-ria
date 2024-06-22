@@ -1,34 +1,76 @@
+
 function showFormCaps() {
-    window.location.href = 'Form_Caps.html';
+    const html = HtmlService.createHtmlOutputFromFile('FormularioCaps')
+        .setWidth(1280)
+        .setHeight(720);
+    SpreadsheetApp.getUi().showModalDialog(html, 'Registro de Captações');
 }
 
 function showExitForm() {
-    window.location.href = 'Form_Saidas.html';
-}
-
-function showEstoqueForm() {
-    window.location.href = 'Form_Estoque.html';
+    const html = HtmlService.createHtmlOutputFromFile('FormularioSaida')
+        .setWidth(1280)
+        .setHeight(720);
+    SpreadsheetApp.getUi().showModalDialog(html, 'Registro de Saídas');
 }
 
 function showSalesForm() {
-    window.location.href = 'Fomr_Vendas.html';
+    const html = HtmlService.createHtmlOutputFromFile('FormularioVendas')
+        .setWidth(1280)
+        .setHeight(720);
+    SpreadsheetApp.getUi().showModalDialog(html, 'Registro de Vendas');
 }
 
 function showCorretorForm() {
-    window.location.href = 'Form_Corretor.html';
+    const html = HtmlService.createHtmlOutputFromFile('FormularioCorretor')
+        .setWidth(1280)
+        .setHeight(720);
+    const nextId = getNextCorretorId();
+    const gerentes = getGerentes();
+    const gerentesOptions = gerentes.map(g => `<option value="${g.id}">${g.nome}</option>`).join('');
+    html.append(`<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('idCorretor').value = '${nextId}';
+            const gerenteSelect = document.getElementById('idGerente');
+            gerenteSelect.innerHTML = '<option value="">Selecionar Gerente</option>' + '${gerentesOptions}';
+        });
+    </script>`);
+    SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Corretor');
 }
 
 function showGerenteForm() {
-    window.location.href = 'Form_Gerente.html';
+    const html = HtmlService.createHtmlOutputFromFile('FormularioGerente')
+        .setWidth(1280)
+        .setHeight(720);
+    const nextId = getNextGerenteId();
+    html.append(`<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('idGerente').value = '${nextId}';
+        });
+    </script>`);
+    SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Gerente');
+}
+
+function showEstoqueForm() {
+    const html = HtmlService.createHtmlOutputFromFile('FormularioEstoque')
+        .setWidth(1280)
+        .setHeight(720);
+    SpreadsheetApp.getUi().showModalDialog(html, 'Registrar Estoque');
 }
 
 function showTipoForm() {
-    window.location.href = 'Form_Tipo.html';
+    const html = HtmlService.createHtmlOutputFromFile('FormularioTipo')
+        .setWidth(1280)
+        .setHeight(720);
+    SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Tipo');
 }
 
 function showBairroForm() {
-    window.location.href = 'Form_Bairro.html';
+    const html = HtmlService.createHtmlOutputFromFile('FormularioBairro')
+        .setWidth(1280)
+        .setHeight(720);
+    SpreadsheetApp.getUi().showModalDialog(html, 'Cadastro de Bairro');
 }
+
 
 
 function hideSheets(sheetNames) {
