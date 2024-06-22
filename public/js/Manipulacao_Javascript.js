@@ -2,33 +2,34 @@ function showFormCaps() {
     window.location.href = 'Form_Caps.html';
 }
 
-function showFormSaidas() {
+function showExitForm() {
     window.location.href = 'Form_Saidas.html';
 }
 
-function showFormEstoque() {
+function showEstoqueForm() {
     window.location.href = 'Form_Estoque.html';
 }
 
-function showFormSales() {
+function showSalesForm() {
     window.location.href = 'Fomr_Vendas.html';
 }
 
-function showFormCorretor() {
+function showCorretorForm() {
     window.location.href = 'Form_Corretor.html';
 }
 
-function showFormGerente() {
+function showGerenteForm() {
     window.location.href = 'Form_Gerente.html';
 }
 
-function showFormTipo() {
+function showTipoForm() {
     window.location.href = 'Form_Tipo.html';
 }
 
-function showFormBairro() {
+function showBairroForm() {
     window.location.href = 'Form_Bairro.html';
 }
+
 
 function hideSheets(sheetNames) {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
