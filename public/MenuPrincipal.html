@@ -62,20 +62,16 @@
     <div class="menu">
         <h1>Menu Principal</h1>
         <div class="button-container">
-            <button onclick="navigateTo('showFormCaps')">Registrar Captação</button>
-            <button onclick="navigateTo('Form_Saidas.html')">Registrar Saída</button>
-            <button onclick="navigateTo('Form_Estoque.html')">Registrar Estoque</button>
-            <button onclick="navigateTo('Fomr_Vendas.html')">Registrar Venda</button>
-            <button onclick="navigateTo('Form_Corretor.html')">Cadastrar Corretor</button>
-            <button onclick="navigateTo('Form_Gerente.html')">Cadastrar Gerente</button>
-            <button onclick="navigateTo('Form_Tipo.html')">Cadastrar Tipo</button>
-            <button onclick="navigateTo('Form_Bairro.html')">Cadastrar Bairro</button>
+            <button onclick="showFormCaps()">Registrar Captação</button>
+            <button onclick="showExitForm()">Registrar Saída</button>
+            <button onclick="showEstoqueForm()">Registrar Estoque</button>
+            <button onclick="showSalesForm()">Registrar Venda</button>
+            <button onclick="showCorretorForm()">Cadastrar Corretor</button>
+            <button onclick="showGerenteForm()">Cadastrar Gerente</button>
+            <button onclick="showTipoForm()">Cadastrar Tipo</button>
+            <button onclick="showBairroForm()">Cadastrar Bairro</button>
         </div>
     </div>
-    <script>
-        function navigateTo(page) {
-            window.location.href = page;
-        }
-    </script>
+    <script src="js/Manipulacao_Javascript.js"></script>
 </body>
 </html>
