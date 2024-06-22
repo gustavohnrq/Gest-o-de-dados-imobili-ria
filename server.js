@@ -53,7 +53,7 @@ function getAccessToken(oAuth2Client, resolve, reject) {
     });
 }
 
-// Configure sua API de Rotas para Funções
+// Funções de API
 app.post('/getCaptadores', async (req, res) => {
     try {
         const auth = await authenticate();
