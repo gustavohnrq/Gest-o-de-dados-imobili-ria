@@ -51,10 +51,7 @@ function showGerenteForm() {
 }
 
 function showEstoqueForm() {
-    window.location.href = 'Form_Estoque.html'
-        .setWidth(1280)
-        .setHeight(720);
-    SpreadsheetApp.getUi().showModalDialog(html, 'Registrar Estoque');
+    window.location.href = 'Form_Estoque.html';
 }
 
 function showTipoForm() {
