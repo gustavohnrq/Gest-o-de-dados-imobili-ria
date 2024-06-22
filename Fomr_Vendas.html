@@ -4,252 +4,288 @@
     <title>Registro de Vendas</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            font-family: Roboto, Arial, sans-serif;
-            background: linear-gradient(120deg, #FAC80B, #DC2963);
-            height: 100vh;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             display: flex;
             justify-content: center;
-            align-items: center;
-            overflow: auto;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
         }
-        .center {
-            width: 80vw; /* Ajuste conforme necessário */
-            max-width: 800px; /* Limite de largura máxima */
-            background: white;
-            border-radius: 10px;
+        .form {
+            background-color: #15172b;
+            border-radius: 20px;
+            box-sizing: border-box;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            box-sizing: border-box;
+            width: 85%; /* 60% of 1280px is 768px */
+            max-height: 90%; /* 80% of 720px is 576px */
+            overflow-y: auto; /* Allow scrolling if content overflows */
         }
-        .center h1 {
+        .title {
+            color: #eee;
+            font-family: sans-serif;
+            font-size: 36px;
+            font-weight: 600;
+            margin-top: 30px;
             text-align: center;
-            padding: 0 0 20px 0;
-            border-bottom: 1px solid silver;
-            color: #007BFF;
         }
-        form {
-            padding: 0 40px;
-            box-sizing: border-box;
-            overflow-y: auto; /* Adicione isso para permitir a rolagem */
-            max-height: 60vh; /* Limite a altura do formulário */
-        }
-        .txt_field {
+        .input-container {
+            height: 50px;
             position: relative;
-            margin: 30px 0;
-        }
-        .txt_field input, .txt_field select, .txt_field textarea {
             width: 100%;
-            padding: 10px 5px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background: none;
-            outline: none;
-            box-sizing: border-box;
+            margin-top: 20px;
         }
-        .txt_field input[type="checkbox"] {
+        .input {
+            background-color: #303245;
+            border-radius: 12px;
+            border: 0;
+            box-sizing: border-box;
+            color: #eee;
+            font-size: 18px;
+            height: 100%;
+            outline: 0;
+            padding: 4px 20px 0;
+            width: 100%;
+        }
+        .cut {
+            background-color: #15172b;
+            border-radius: 10px;
+            height: 20px;
+            left: 20px;
+            position: absolute;
+            top: -20px;
+            transform: translateY(0);
+            transition: transform 200ms;
+            width: 76px;
+        }
+        .cut-short {
+            width: 50px;
+        }
+        .input:focus ~ .cut,
+        .input:not(:placeholder-shown) ~ .cut {
+            transform: translateY(8px);
+        }
+        .placeholder {
+            color: #65657b;
+            font-family: sans-serif;
+            left: 20px;
+            line-height: 14px;
+            pointer-events: none;
+            position: absolute;
+            transform-origin: 0 50%;
+            transition: transform 200ms, color 200ms;
+            top: 20px;
+        }
+        .input:focus ~ .placeholder,
+        .input:not(:placeholder-shown) ~ .placeholder {
+            transform: translateY(-30px) translateX(10px) scale(0.75);
+        }
+        .input:not(:placeholder-shown) ~ .placeholder {
+            color: #808097;
+        }
+        .input:focus ~ .placeholder {
+            color: #dc2f55;
+        }
+        .submit {
+            background-color: #08d;
+            border-radius: 12px;
+            border: 0;
+            box-sizing: border-box;
+            color: #eee;
+            cursor: pointer;
+            font-size: 18px;
+            height: 50px;
+            margin-top: 38px;
+            text-align: center;
+            width: 100%;
+        }
+        .submit:active {
+            background-color: #06b;
+        }
+        .btn-primary {
+            background-color: #08d;
+            border-radius: 12px;
+            border: 0;
+            color: #eee;
+            cursor: pointer;
+            font-size: 18px;
+            height: 50px;
+            margin-top: 10px;
+            text-align: center;
+            width: 100%;
+        }
+        .btn-primary:hover {
+            background-color: #06b;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .checkbox-container input {
             width: auto;
             margin-right: 10px;
         }
-        .txt_field label {
-            position: absolute;
-            top: 50%;
-            left: 10px;
-            color: #adadad;
-            transform: translateY(-50%);
-            font-size: 16px;
-            pointer-events: none;
-            transition: .5s;
-        }
-        .txt_field input:focus ~ label,
-        .txt_field input:valid ~ label,
-        .txt_field select:focus ~ label,
-        .txt_field select:valid ~ label,
-        .txt_field textarea:focus ~ label,
-        .txt_field textarea:valid ~ label,
-        .txt_field input[type="date"]:focus ~ label,
-        .txt_field input[type="date"]:valid ~ label {
-            top: -20px;
-            left: 5px;
-            color: #007BFF;
-            font-size: 12px;
-            background: white;
-            padding: 0 5px;
-        }
-        .txt_field input[type="date"] {
-            padding-right: 5px; /* Ajuste para o campo de data */
-        }
-        .txt_field select:not(:focus):not(:valid) + label,
-        .txt_field input[type="date"]:not(:focus):not(:valid) + label {
-            top: 10px;
-            left: 10px;
-            color: #adadad;
-            font-size: 16px;
-        }
-        input[type="submit"], button {
-            width: 100%;
-            height: 50px;
-            border: 1px solid;
-            border-radius: 25px;
+        .checkbox-container label {
+            color: #eee;
             font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            background-color: #38B24A;
-            color: white;
-            transition: .5s;
-            margin-top: 10px;
-        }
-        input[type="submit"]:hover, button:hover {
-            background: #2d8f39;
-            color: #e9f4fb;
-        }
-        .btn-primary {
-            width: 100%;
-            margin-top: 10px;
-            background-color: #9B74B1;
-            color: white;
-            padding: 10px 0;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        .btn-primary:hover {
-            background-color: #7c5a92;
         }
     </style>
 </head>
 <body>
-    <div class="center">
-        
-        <form id="formVendas">
-            <div class="txt_field">
-                <input type="text" id="san" name="san" required>
-                <label for="san">SAN</label>
-            </div>
-            <div class="txt_field">
-                <input type="date" id="dataVenda" name="dataVenda" required>
-                <label for="dataVenda">Data da Venda</label>
-            </div>
-            <div class="txt_field">
-                <select id="bairro" name="bairro" required>
-                    <option value=""></option>
-                </select>
-                <label for="bairro">Bairro</label>
-            </div>
-            <div class="txt_field">
-                <input type="text" id="quadra" name="quadra" required>
-                <label for="quadra">Quadra</label>
-            </div>
-            <div class="txt_field">
-                <select id="tipo" name="tipo" required>
-                    <option value=""></option>
-                </select>
-                <label for="tipo">Tipo</label>
-            </div>
-            <div class="txt_field" style="display: flex; align-items: center;">
-                <input type="checkbox" id="focoPP" name="focoPP">
-                <label for="focoPP" style="position: static; transform: none; margin-left: 10px;">Foco PP</label>
-            </div>
-            <div class="txt_field" style="display: flex; align-items: center;">
-                <input type="checkbox" id="focoAC" name="focoAC">
-                <label for="focoAC" style="position: static; transform: none; margin-left: 10px;">Foco AC</label>
-            </div>
-            <div class="txt_field">
-                <input type="number" id="valorNegocio" name="valorNegocio" required step="0.01">
-                <label for="valorNegocio">Valor do Negócio</label>
-            </div>
-            <div class="txt_field">
-                <input type="number" id="valorComissao" name="valorComissao" required step="0.01">
-                <label for="valorComissao">Valor da Comissão</label>
-            </div>
-            <div class="txt_field">
-                <input type="number" id="valorTotal61" name="valorTotal61" required step="0.01">
-                <label for="valorTotal61">Valor Total 61</label>
-            </div>
-            <div class="txt_field">
-                <select id="vendedor1" name="vendedor1" required></select>
-                <label for="vendedor1">Vendedor 1</label>
-            </div>
-            <div class="txt_field">
-                <select id="imobiliaria" name="imobiliaria" required></select>
-                <label for="imobiliaria">Imobiliária</label>
-            </div>
-            <div class="txt_field">
-                <input type="number" id="porcentagemVendedor1" name="porcentagemVendedor1" required step="0.01">
-                <label for="porcentagemVendedor1">% Vendedor 1</label>
-            </div>
-            <div class="txt_field">
-                <select id="gerenteVenda1" name="gerenteVenda1" required></select>
-                <label for="gerenteVenda1">Gerente de Venda 1</label>
-            </div>
-            <div class="txt_field">
-                <input type="number" id="porcentagemGerenteVenda1" name="porcentagemGerenteVenda1" required step="0.01">
-                <label for="porcentagemGerenteVenda1">% Gerente de Venda 1</label>
-            </div>
-            <div class="txt_field">
-                <select id="vendedor2" name="vendedor2"></select>
-                <label for="vendedor2">Vendedor 2</label>
-            </div>
-            <div class="txt_field">
-                <input type="number" id="porcentagemVendedor2" name="porcentagemVendedor2" step="0.01">
-                <label for="porcentagemVendedor2">% Vendedor 2</label>
-            </div>
-            <div class="txt_field">
-                <select id="gerenteVenda2" name="gerenteVenda2"></select>
-                <label for="gerenteVenda2">Gerente de Venda 2</label>
-            </div>
-            <div class="txt_field">
-                <input type="number" id="porcentagemGerenteVenda2" name="porcentagemGerenteVenda2" step="0.01">
-                <label for="porcentagemGerenteVenda2">% Gerente de Venda 2</label>
-            </div>
-            <div class="txt_field">
-                <select id="captador1" name="captador1" required></select>
-                <label for="captador1">Captador 1</label>
-            </div>
-            <div class="txt_field">
-                <input type="number" id="porcentagemCaptador1" name="porcentagemCaptador1" required step="0.01">
-                <label for="porcentagemCaptador1">% Captador 1</label>
-            </div>
-            <div class="txt_field">
-                <select id="gerenteCaptacao1" name="gerenteCaptacao1" required></select>
-                <label for="gerenteCaptacao1">Gerente de Captação 1</label>
-            </div>
-            <div class="txt_field">
-                <input type="number" id="porcentagemGerenteCaptacao1" name="porcentagemGerenteCaptacao1" required step="0.01">
-                <label for="porcentagemGerenteCaptacao1">% Gerente de Captação 1</label>
-            </div>
-            <div class="txt_field">
-                <select id="captador2" name="captador2"></select>
-                <label for="captador2">Captador 2</label>
-            </div>
-            <div class="txt_field">
-                <input type="number" id="porcentagemCaptador2" name="porcentagemCaptador2" step="0.01">
-                <label for="porcentagemCaptador2">% Captador 2</label>
-            </div>
-            <div class="txt_field">
-                <select id="gerenteCaptacao2" name="gerenteCaptacao2"></select>
-                <label for="gerenteCaptacao2">Gerente de Captação 2</label>
-            </div>
-            <div class="txt_field">
-                <input type="number" id="porcentagemGerenteCaptacao2" name="porcentagemGerenteCaptacao2" step="0.01">
-                <label for="porcentagemGerenteCaptacao2">% Gerente de Captação 2</label>
-            </div>
-            <div class="txt_field">
-                <input type="text" id="origemLeadVenda" name="origemLeadVenda" required>
-                <label for="origemLeadVenda">Origem do Lead da Venda</label>
-            </div>
-            <div class="txt_field">
-                <input type="date" id="entradaLead" name="entradaLead" required>
-                <label for="entradaLead">Entrada do Lead</label>
-            </div>
-            <input type="submit" value="Enviar" onclick="submitForm()">
-        </form>
-        <button class="btn-primary" onclick="google.script.run.showMainMenu()">Menu Principal</button>
-    </div>
+    <form id="formVendas" class="form">
+        <div class="title">Registro de Vendas</div>
+        <div class="input-container">
+            <input type="text" id="san" name="san" class="input" placeholder=" " required>
+            <div class="cut"></div>
+            <label for="san" class="placeholder">SAN</label>
+        </div>
+        <div class="input-container">
+            <input type="date" id="dataVenda" name="dataVenda" class="input" placeholder=" " required>
+            <div class="cut"></div>
+            <label for="dataVenda" class="placeholder">Data da Venda</label>
+        </div>
+        <div class="input-container">
+            <select id="bairro" name="bairro" class="input" required>
+                <option value=""></option>
+            </select>
+            <div class="cut"></div>
+            <label for="bairro" class="placeholder">Bairro</label>
+        </div>
+        <div class="input-container">
+            <input type="text" id="quadra" name="quadra" class="input" placeholder=" " required>
+            <div class="cut"></div>
+            <label for="quadra" class="placeholder">Quadra</label>
+        </div>
+        <div class="input-container">
+            <select id="tipo" name="tipo" class="input" required>
+                <option value=""></option>
+            </select>
+            <div class="cut"></div>
+            <label for="tipo" class="placeholder">Tipo</label>
+        </div>
+        <div class="checkbox-container">
+            <input type="checkbox" id="focoPP" name="focoPP">
+            <label for="focoPP">Foco PP</label>
+        </div>
+        <div class="checkbox-container">
+            <input type="checkbox" id="focoAC" name="focoAC">
+            <label for="focoAC">Foco AC</label>
+        </div>
+        <div class="input-container">
+            <input type="number" id="valorNegocio" name="valorNegocio" class="input" placeholder=" " required step="0.01">
+            <div class="cut"></div>
+            <label for="valorNegocio" class="placeholder">Valor do Negócio</label>
+        </div>
+        <div class="input-container">
+            <input type="number" id="valorComissao" name="valorComissao" class="input" placeholder=" " required step="0.01">
+            <div class="cut"></div>
+            <label for="valorComissao" class="placeholder">Valor da Comissão</label>
+        </div>
+        <div class="input-container">
+            <input type="number" id="valorTotal61" name="valorTotal61" class="input" placeholder=" " required step="0.01">
+            <div class="cut"></div>
+            <label for="valorTotal61" class="placeholder">Valor Total 61</label>
+        </div>
+        <div class="input-container">
+            <select id="vendedor1" name="vendedor1" class="input" required onchange="updateManagerSelect('vendedor1', window.corretoresData)"></select>
+            <div class="cut"></div>
+            <label for="vendedor1" class="placeholder">Vendedor 1</label>
+        </div>
+        <div class="input-container">
+            <select id="imobiliaria" name="imobiliaria" class="input" required></select>
+            <div class="cut"></div>
+            <label for="imobiliaria" class="placeholder">Imobiliária</label>
+        </div>
+        <div class="input-container">
+            <input type="number" id="porcentagemVendedor1" name="porcentagemVendedor1" class="input" placeholder=" " required step="0.01">
+            <div class="cut"></div>
+            <label for="porcentagemVendedor1" class="placeholder">% Vendedor 1</label>
+        </div>
+        <div class="input-container">
+            <select id="gerenteVenda1" name="gerenteVenda1" class="input" required></select>
+            <div class="cut"></div>
+            <label for="gerenteVenda1" class="placeholder">Gerente de Venda 1</label>
+        </div>
+        <div class="input-container">
+            <input type="number" id="porcentagemGerenteVenda1" name="porcentagemGerenteVenda1" class="input" placeholder=" " required step="0.01">
+            <div class="cut"></div>
+            <label for="porcentagemGerenteVenda1" class="placeholder">% Gerente de Venda 1</label>
+        </div>
+        <div class="input-container">
+            <select id="vendedor2" name="vendedor2" class="input" onchange="updateManagerSelect('vendedor2', window.corretoresData)"></select>
+            <div class="cut"></div>
+            <label for="vendedor2" class="placeholder">Vendedor 2</label>
+        </div>
+        <div class="input-container">
+            <input type="number" id="porcentagemVendedor2" name="porcentagemVendedor2" class="input" placeholder=" " step="0.01">
+            <div class="cut"></div>
+            <label for="porcentagemVendedor2" class="placeholder">% Vendedor 2</label>
+        </div>
+        <div class="input-container">
+            <select id="gerenteVenda2" name="gerenteVenda2" class="input"></select>
+            <div class="cut"></div>
+            <label for="gerenteVenda2" class="placeholder">Gerente de Venda 2</label>
+        </div>
+        <div class="input-container">
+            <input type="number" id="porcentagemGerenteVenda2" name="porcentagemGerenteVenda2" class="input" placeholder=" " step="0.01">
+            <div class="cut"></div>
+            <label for="porcentagemGerenteVenda2" class="placeholder">% Gerente de Venda 2</label>
+        </div>
+        <div class="input-container">
+            <select id="captador1" name="captador1" class="input" required onchange="updateManagerSelect('captador1', window.corretoresData)"></select>
+            <div class="cut"></div>
+            <label for="captador1" class="placeholder">Captador 1</label>
+        </div>
+        <div class="input-container">
+            <input type="number" id="porcentagemCaptador1" name="porcentagemCaptador1" class="input" placeholder=" " required step="0.01">
+            <div class="cut"></div>
+            <label for="porcentagemCaptador1" class="placeholder">% Captador 1</label>
+        </div>
+        <div class="input-container">
+            <select id="gerenteCaptacao1" name="gerenteCaptacao1" class="input" required></select>
+            <div class="cut"></div>
+            <label for="gerenteCaptacao1" class="placeholder">Gerente de Captação 1</label>
+        </div>
+        <div class="input-container">
+            <input type="number" id="porcentagemGerenteCaptacao1" name="porcentagemGerenteCaptacao1" class="input" placeholder=" " required step="0.01">
+            <div class="cut"></div>
+            <label for="porcentagemGerenteCaptacao1" class="placeholder">% Gerente de Captação 1</label>
+        </div>
+        <div class="input-container">
+            <select id="captador2" name="captador2" class="input" onchange="updateManagerSelect('captador2', window.corretoresData)"></select>
+            <div class="cut"></div>
+            <label for="captador2" class="placeholder">Captador 2</label>
+        </div>
+        <div class="input-container">
+            <input type="number" id="porcentagemCaptador2" name="porcentagemCaptador2" class="input" placeholder=" " step="0.01">
+            <div class="cut"></div>
+            <label for="porcentagemCaptador2" class="placeholder">% Captador 2</label>
+        </div>
+        <div class="input-container">
+            <select id="gerenteCaptacao2" name="gerenteCaptacao2" class="input"></select>
+            <div class="cut"></div>
+            <label for="gerenteCaptacao2" class="placeholder">Gerente de Captação 2</label>
+        </div>
+        <div class="input-container">
+            <input type="number" id="porcentagemGerenteCaptacao2" name="porcentagemGerenteCaptacao2" class="input" placeholder=" " step="0.01">
+            <div class="cut"></div>
+            <label for="porcentagemGerenteCaptacao2" class="placeholder">% Gerente de Captação 2</label>
+        </div>
+        <div class="input-container">
+            <input type="text" id="origemLeadVenda" name="origemLeadVenda" class="input" placeholder=" " required>
+            <div class="cut"></div>
+            <label for="origemLeadVenda" class="placeholder">Origem do Lead da Venda</label>
+        </div>
+        <div class="input-container">
+            <input type="date" id="entradaLead" name="entradaLead" class="input" placeholder=" " required>
+            <div class="cut"></div>
+            <label for="entradaLead" class="placeholder">Entrada do Lead</label>
+        </div>
+        <button type="button" class="submit" onclick="submitForm()">Enviar</button>
+        <button type="button" class="btn-primary" onclick="google.script.run.showMainMenu()">Menu Principal</button>
+    </form>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             google.script.run.withSuccessHandler(function(data) {

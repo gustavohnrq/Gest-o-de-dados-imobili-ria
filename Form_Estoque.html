@@ -4,123 +4,135 @@
     <title>Registrar Estoque</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            font-family: Roboto, Arial, sans-serif;
-            background: linear-gradient(120deg, #FAC80B, #DC2963);
-            height: 100vh;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             display: flex;
             justify-content: center;
-            align-items: center;
-            overflow: auto;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
         }
-        .center {
-            width: 40vw; /* Ajustar a largura conforme necessário */
-            max-width: 500px; /* Limite de largura máxima */
-            background: white;
-            border-radius: 10px;
+        .form {
+            background-color: #15172b;
+            border-radius: 20px;
+            box-sizing: border-box;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            box-sizing: border-box;
+            width: 85%; /* 60% of 1280px is 768px */
+            max-height: 90%; /* 80% of 720px is 576px */
+            overflow-y: auto; /* Allow scrolling if content overflows */
         }
-        .center h1 {
+        .title {
+            color: #eee;
+            font-family: sans-serif;
+            font-size: 36px;
+            font-weight: 600;
+            margin-top: 30px;
             text-align: center;
-            padding: 0 0 20px 0;
-            border-bottom: 1px solid silver;
-            color: #007BFF;
         }
-        form {
-            padding: 0 40px;
-            box-sizing: border-box;
-            overflow-y: auto; /* Adicione isso para permitir a rolagem */
-            max-height: 60vh; /* Limite a altura do formulário */
-        }
-        .txt_field {
-            position: relative;
-            margin: 30px 0;
-        }
-        .txt_field input, .txt_field select, .txt_field textarea {
-            width: 100%;
-            padding: 10px 5px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background: none;
-            outline: none;
-            box-sizing: border-box;
-        }
-        .txt_field input[type="file"] {
-            padding: 10px 0; /* Ajuste para o campo de arquivo */
-        }
-        .txt_field label {
-            position: absolute;
-            top: 50%;
-            left: 10px;
-            color: #adadad;
-            transform: translateY(-50%);
-            font-size: 16px;
-            pointer-events: none;
-            transition: .5s;
-        }
-        .txt_field input:focus ~ label,
-        .txt_field input:valid ~ label,
-        .txt_field select:focus ~ label,
-        .txt_field select:valid ~ label,
-        .txt_field textarea:focus ~ label,
-        .txt_field textarea:valid ~ label {
-            top: -20px;
-            left: 5px;
-            color: #007BFF;
-            font-size: 12px;
-            background: white;
-            padding: 0 5px;
-        }
-        input[type="submit"], button {
-            width: 100%;
+        .input-container {
             height: 50px;
-            border: 1px solid;
-            border-radius: 25px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            background-color: #38B24A;
-            color: white;
-            transition: .5s;
-            margin-top: 10px;
+            position: relative;
+            width: 100%;
+            margin-top: 20px;
         }
-        input[type="submit"]:hover, button:hover {
-            background: #2d8f39;
-            color: #e9f4fb;
+        .input {
+            background-color: #303245;
+            border-radius: 12px;
+            border: 0;
+            box-sizing: border-box;
+            color: #eee;
+            font-size: 18px;
+            height: 100%;
+            outline: 0;
+            padding: 4px 20px 0;
+            width: 100%;
+        }
+        .input[type="file"] {
+            padding: 10px 0; /* Adjust padding for file input */
+        }
+        .cut {
+            background-color: #15172b;
+            border-radius: 10px;
+            height: 20px;
+            left: 20px;
+            position: absolute;
+            top: -20px;
+            transform: translateY(0);
+            transition: transform 200ms;
+            width: 76px;
+        }
+        .cut-short {
+            width: 50px;
+        }
+        .input:focus ~ .cut,
+        .input:not(:placeholder-shown) ~ .cut {
+            transform: translateY(8px);
+        }
+        .placeholder {
+            color: #65657b;
+            font-family: sans-serif;
+            left: 20px;
+            line-height: 14px;
+            pointer-events: none;
+            position: absolute;
+            transform-origin: 0 50%;
+            transition: transform 200ms, color 200ms;
+            top: 20px;
+        }
+        .input:focus ~ .placeholder,
+        .input:not(:placeholder-shown) ~ .placeholder {
+            transform: translateY(-30px) translateX(10px) scale(0.75);
+        }
+        .input:not(:placeholder-shown) ~ .placeholder {
+            color: #808097;
+        }
+        .input:focus ~ .placeholder {
+            color: #dc2f55;
+        }
+        .submit {
+            background-color: #08d;
+            border-radius: 12px;
+            border: 0;
+            box-sizing: border-box;
+            color: #eee;
+            cursor: pointer;
+            font-size: 18px;
+            height: 50px;
+            margin-top: 38px;
+            text-align: center;
+            width: 100%;
+        }
+        .submit:active {
+            background-color: #06b;
         }
         .btn-primary {
-            width: 100%;
-            margin-top: 10px;
-            background-color: #9B74B1;
-            color: white;
-            padding: 10px 0;
-            border: none;
-            border-radius: 25px;
+            background-color: #08d;
+            border-radius: 12px;
+            border: 0;
+            color: #eee;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            font-size: 18px;
+            height: 50px;
+            margin-top: 10px;
+            text-align: center;
+            width: 100%;
         }
         .btn-primary:hover {
-            background-color: #7c5a92;
+            background-color: #06b;
         }
     </style>
 </head>
 <body>
-    <div class="center">
-        
-        <form id="uploadForm">
-            <div class="txt_field">
-                <input type="file" id="fileUpload" name="fileUpload" accept=".xlsx">
-                <label for="fileUpload">Escolha o arquivo .xlsx</label>
-            </div>
-            <button type="button" onclick="uploadFile()">Upload</button>
-        </form>
-        <button class="btn-primary" onclick="google.script.run.showMainMenu()">Menu Principal</button>
-    </div>
+    <form id="uploadForm" class="form">
+        <div class="title">Registrar Estoque</div>
+        <div class="input-container">
+            <input type="file" id="fileUpload" name="fileUpload" class="input" accept=".xlsx">
+            <div class="cut"></div>
+            <label for="fileUpload" class="placeholder">Escolha o arquivo .xlsx</label>
+        </div>
+        <button type="button" class="submit" onclick="uploadFile()">Upload</button>
+        <button type="button" class="btn-primary" onclick="google.script.run.showMainMenu()">Menu Principal</button>
+    </form>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script>
         function uploadFile() {

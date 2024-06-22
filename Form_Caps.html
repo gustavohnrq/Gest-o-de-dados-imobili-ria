@@ -4,184 +4,191 @@
     <title>Registro de Captações</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            font-family: Roboto, Arial, sans-serif;
-            background: linear-gradient(120deg, #FAC80B, #DC2963);
-            height: 100vh;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             display: flex;
             justify-content: center;
-            align-items: center;
-            overflow: auto;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
         }
-        .center {
-            width: 80vw; /* Ajuste conforme necessário */
-            max-width: 800px; /* Limite de largura máxima */
-            background: white;
-            border-radius: 10px;
+        .form {
+            background-color: #15172b;
+            border-radius: 20px;
+            box-sizing: border-box;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            box-sizing: border-box;
+            width: 85%; /* 60% of 1280px is 768px */
+            max-height: 90%; /* 80% of 720px is 576px */
+            overflow-y: auto; /* Allow scrolling if content overflows */
         }
-        .center h1 {
+        .title {
+            color: #eee;
+            font-family: sans-serif;
+            font-size: 36px;
+            font-weight: 600;
+            margin-top: 30px;
             text-align: center;
-            padding: 0 0 20px 0;
-            border-bottom: 1px solid silver;
-            color: #007BFF;
         }
-        form {
-            padding: 0 40px;
-            box-sizing: border-box;
-            overflow-y: auto; /* Adicione isso para permitir a rolagem */
-            max-height: 60vh; /* Limite a altura do formulário */
-        }
-        .txt_field {
-            position: relative;
-            margin: 30px 0;
-        }
-        .txt_field input, .txt_field select {
-            width: 100%;
-            padding: 10px 5px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background: none;
-            outline: none;
-            box-sizing: border-box;
-        }
-        .txt_field input[type="checkbox"] {
-            width: auto;
-            margin-right: 10px;
-        }
-        .txt_field label {
-            position: absolute;
-            top: 50%;
-            left: 10px;
-            color: #adadad;
-            transform: translateY(-50%);
-            font-size: 16px;
-            pointer-events: none;
-            transition: .5s;
-        }
-        .txt_field input:focus ~ label,
-        .txt_field input:valid ~ label,
-        .txt_field select:focus ~ label,
-        .txt_field select:valid ~ label,
-        .txt_field input[type="date"]:focus ~ label,
-        .txt_field input[type="date"]:valid ~ label {
-            top: -20px;
-            left: 5px;
-            color: #007BFF;
-            font-size: 12px;
-            background: white;
-            padding: 0 5px;
-        }
-        .txt_field input[type="date"] {
-            padding-right: 5px; /* Ajuste para o campo de data */
-        }
-        .txt_field select:not(:focus):not(:valid) + label,
-        .txt_field input[type="date"]:not(:focus):not(:valid) + label {
-            top: 10px;
-            left: 10px;
-            color: #adadad;
-            font-size: 16px;
-        }
-        input[type="submit"], button {
-            width: 100%;
+        .input-container {
             height: 50px;
-            border: 1px solid;
-            border-radius: 25px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            background-color: #38B24A;
-            color: white;
-            transition: .5s;
-            margin-top: 10px;
+            position: relative;
+            width: 100%;
+            margin-top: 20px;
         }
-        input[type="submit"]:hover, button:hover {
-            background: #2d8f39;
-            color: #e9f4fb;
+        .input {
+            background-color: #303245;
+            border-radius: 12px;
+            border: 0;
+            box-sizing: border-box;
+            color: #eee;
+            font-size: 18px;
+            height: 100%;
+            outline: 0;
+            padding: 4px 20px 0;
+            width: 100%;
+        }
+        .cut {
+            background-color: #15172b;
+            border-radius: 10px;
+            height: 20px;
+            left: 20px;
+            position: absolute;
+            top: -20px;
+            transform: translateY(0);
+            transition: transform 200ms;
+            width: 76px;
+        }
+        .cut-short {
+            width: 50px;
+        }
+        .input:focus ~ .cut,
+        .input:not(:placeholder-shown) ~ .cut {
+            transform: translateY(8px);
+        }
+        .placeholder {
+            color: #65657b;
+            font-family: sans-serif;
+            left: 20px;
+            line-height: 14px;
+            pointer-events: none;
+            position: absolute;
+            transform-origin: 0 50%;
+            transition: transform 200ms, color 200ms;
+            top: 20px;
+        }
+        .input:focus ~ .placeholder,
+        .input:not(:placeholder-shown) ~ .placeholder {
+            transform: translateY(-30px) translateX(10px) scale(0.75);
+        }
+        .input:not(:placeholder-shown) ~ .placeholder {
+            color: #808097;
+        }
+        .input:focus ~ .placeholder {
+            color: #dc2f55;
+        }
+        .submit {
+            background-color: #08d;
+            border-radius: 12px;
+            border: 0;
+            box-sizing: border-box;
+            color: #eee;
+            cursor: pointer;
+            font-size: 18px;
+            height: 50px;
+            margin-top: 38px;
+            text-align: center;
+            width: 100%;
+        }
+        .submit:active {
+            background-color: #06b;
         }
         .btn-primary {
-            width: 100%;
-            margin-top: 10px;
-            background-color: #9B74B1;
-            color: white;
-            padding: 10px 0;
-            border: none;
-            border-radius: 25px;
+            background-color: #08d;
+            border-radius: 12px;
+            border: 0;
+            color: #eee;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            font-size: 18px;
+            height: 50px;
+            margin-top: 10px;
+            text-align: center;
+            width: 100%;
         }
         .btn-primary:hover {
-            background-color: #7c5a92;
+            background-color: #06b;
         }
     </style>
 </head>
 <body>
-    <div class="center">
-        
-        <form id="formCaptacao">
-            <div class="txt_field">
-                <input type="number" id="codigo" name="codigo" required>
-                <label for="codigo">Código</label>
-            </div>
-            <div class="txt_field">
-                <select id="captador1" name="captador1" required onchange="updateManager()">
-                    <option value=""></option>
-                </select>
-                <label for="captador1">Captador 1</label>
-            </div>
-            <div class="txt_field">
-                <select id="captador2" name="captador2" onchange="updateManager()">
-                    <option value=""></option>
-                </select>
-                <label for="captador2">Captador 2</label>
-            </div>
-            <div class="txt_field">
-                <select id="captador3" name="captador3" onchange="updateManager()">
-                    <option value=""></option>
-                </select>
-                <label for="captador3">Captador 3</label>
-            </div>
-            <div class="txt_field">
-                <input type="text" id="gerente" name="gerente" readonly>
-                <label for="gerente">Gerente</label>
-            </div>
-            <div class="txt_field">
-                <input type="date" id="dataEntrada" name="dataEntrada" required>
-                <label for="dataEntrada">Data de Entrada</label>
-            </div>
-            <div class="txt_field">
-                <select id="tipo" name="tipo" required>
-                    <option value=""></option>
-                </select>
-                <label for="tipo">Tipo</label>
-            </div>
-            <div class="txt_field">
-                <input type="number" id="valor" name="valor" required step="0.01">
-                <label for="valor">Valor</label>
-            </div>
-            <div class="txt_field">
-                <select id="bairro" name="bairro" required>
-                    <option value=""></option>
-                </select>
-                <label for="bairro">Bairro</label>
-            </div>
-            <div class="txt_field" style="display: flex; align-items: center;">
-                <input type="checkbox" id="focoPP" name="focoPP">
-                <label for="focoPP" style="position: static; transform: none; margin-left: 10px;">Foco PP</label>
-            </div>
-            <div class="txt_field" style="display: flex; align-items: center;">
-                <input type="checkbox" id="focoAC" name="focoAC">
-                <label for="focoAC" style="position: static; transform: none; margin-left: 10px;">Foco AC</label>
-            </div>
-            <input type="submit" value="Enviar" onclick="submitForm()">
-        </form>
-        <button class="btn-primary" onclick="google.script.run.showMainMenu()">Menu Principal</button>
-    </div>
+    <form id="formCaptacao" class="form">
+        <div class="title">Registro de Captações</div>
+        <div class="input-container ic1">
+            <input type="number" id="codigo" name="codigo" class="input" placeholder=" " required>
+            <div class="cut"></div>
+            <label for="codigo" class="placeholder">Código</label>
+        </div>
+        <div class="input-container ic2">
+            <select id="captador1" name="captador1" class="input" required onchange="updateManager()">
+                <option value="">Selecione um captador</option>
+            </select>
+            <div class="cut"></div>
+            <label for="captador1" class="placeholder">Captador 1</label>
+        </div>
+        <div class="input-container ic2">
+            <select id="captador2" name="captador2" class="input" onchange="updateManager()">
+                <option value="">Selecione um captador</option>
+            </select>
+            <div class="cut"></div>
+            <label for="captador2" class="placeholder">Captador 2</label>
+        </div>
+        <div class="input-container ic2">
+            <select id="captador3" name="captador3" class="input" onchange="updateManager()">
+                <option value="">Selecione um captador</option>
+            </select>
+            <div class="cut"></div>
+            <label for="captador3" class="placeholder">Captador 3</label>
+        </div>
+        <div class="input-container ic2">
+            <input type="text" id="gerente" name="gerente" class="input" placeholder=" " readonly>
+            <div class="cut"></div>
+            <label for="gerente" class="placeholder">Gerente</label>
+        </div>
+        <div class="input-container ic2">
+            <input type="date" id="dataEntrada" name="dataEntrada" class="input" placeholder=" " required>
+            <div class="cut"></div>
+            <label for="dataEntrada" class="placeholder">Data de Entrada</label>
+        </div>
+        <div class="input-container ic2">
+            <select id="tipo" name="tipo" class="input" required>
+                <option value="">Selecione um Tipo</option>
+            </select>
+            <div class="cut"></div>
+            <label for="tipo" class="placeholder">Tipo</label>
+        </div>
+        <div class="input-container ic2">
+            <input type="number" id="valor" name="valor" class="input" placeholder=" " required step="0.01">
+            <div class="cut"></div>
+            <label for="valor" class="placeholder">Valor</label>
+        </div>
+        <div class="input-container ic2">
+            <select id="bairro" name="bairro" class="input" required>
+                <option value="">Selecione um Bairro</option>
+            </select>
+            <div class="cut"></div>
+            <label for="bairro" class="placeholder">Bairro</label>
+        </div>
+        <div class="input-container ic2">
+            <label for="focoPP" class="placeholder">Foco PP</label>
+            <input type="checkbox" id="focoPP" name="focoPP">
+        </div>
+        <div class="input-container ic2">
+            <label for="focoAC" class="placeholder">Foco AC</label>
+            <input type="checkbox" id="focoAC" name="focoAC">
+        </div>
+        <button type="button" class="submit" onclick="submitForm()">Enviar</button>
+        <button type="button" class="btn-primary" onclick="google.script.run.showMainMenu()">Menu Principal</button>
+    </form>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             google.script.run.withSuccessHandler(buildDropdowns).getCaptadores();
@@ -193,7 +200,7 @@
             const captadores = ['captador1', 'captador2', 'captador3'];
             captadores.forEach(function(id) {
                 let select = document.getElementById(id);
-                select.innerHTML = '<option value=""></option>';
+                select.innerHTML = '<option value="">Selecione um captador</option>';
                 data.forEach(function(item) {
                     let option = document.createElement('option');
                     option.text = item.Nome;
@@ -205,7 +212,7 @@
 
         function buildBairroDropdown(bairros) {
             var select = document.getElementById('bairro');
-            select.innerHTML = '<option value=""></option>';
+            select.innerHTML = '<option value="">Selecione um bairro</option>';
             bairros.forEach(function(bairro) {
                 var option = document.createElement('option');
                 option.text = bairro.nome;
@@ -253,7 +260,7 @@
         function loadOptions() {
             google.script.run.withSuccessHandler(function(options) {
                 const tipoSelect = document.getElementById('tipo');
-                tipoSelect.innerHTML = '<option value=""></option>';
+                tipoSelect.innerHTML = '<option value="">Selecione um Tipo</option>';
                 options.tipos.forEach(function(tipo) {
                     const opt = document.createElement('option');
                     opt.value = tipo.id;
@@ -262,7 +269,7 @@
                 });
 
                 const bairroSelect = document.getElementById('bairro');
-                bairroSelect.innerHTML = '<option value=""></option>';
+                bairroSelect.innerHTML = '<option value="">Selecione um Bairro</option>';
                 options.bairros.forEach(function(bairro) {
                     const opt = document.createElement('option');
                     opt.value = bairro.id;
@@ -270,6 +277,10 @@
                     bairroSelect.add(opt);
                 });
             }).getOptions();
+        }
+
+        function redirectToMainMenu() {
+            window.location.href = 'pagina-principal.html'; // Substitua pela URL desejada
         }
 
         document.addEventListener('DOMContentLoaded', function() {
