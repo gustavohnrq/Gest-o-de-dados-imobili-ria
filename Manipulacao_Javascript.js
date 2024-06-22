@@ -137,8 +137,8 @@ function getOptions() {
 
 function getBairros() {
     const ss = SpreadsheetApp.openById('1HQDdcbUMj276hnIbPs-WwdWHiUPzMhPRWt4HHRyYGnw');
-    const sheet = ss.getSheetByName('Dim_Imovel');
-    const bairros = sheet.getRange('D2:D' + sheet.getLastRow()).getValues();
+    const sheet = ss.getSheetByName('Dim_Bairro');
+    const bairros = sheet.getRange('A2:B' + sheet.getLastRow()).getValues();
     return [...new Set(bairros.map(row => row[0]).filter(Boolean))];
 }
 
