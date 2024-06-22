@@ -5,6 +5,8 @@ const { google } = require('googleapis');
 const app = express();
 const port = process.env.PORT || 3000;
 
+console.log('Iniciando o servidor...');
+
 // Middleware para servir arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
@@ -13,11 +15,16 @@ app.use(express.json());
 const { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI } = process.env;
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 
+console.log('Credenciais do OAuth2 carregadas...');
+
 // Função para autenticar o cliente OAuth
 function authenticate() {
     return new Promise((resolve, reject) => {
         fs.readFile('token.json', (err, token) => {
-            if (err) return getAccessToken(oAuth2Client, resolve, reject);
+            if (err) {
+                console.log('Erro ao ler o token:', err);
+                return getAccessToken(oAuth2Client, resolve, reject);
+            }
             oAuth2Client.setCredentials(JSON.parse(token));
             resolve(oAuth2Client);
         });
@@ -37,10 +44,16 @@ function getAccessToken(oAuth2Client, resolve, reject) {
     rl.question('Enter the code from that page here: ', (code) => {
         rl.close();
         oAuth2Client.getToken(code, (err, token) => {
-            if (err) return reject(err);
+            if (err) {
+                console.log('Erro ao obter o token:', err);
+                return reject(err);
+            }
             oAuth2Client.setCredentials(token);
             fs.writeFile('token.json', JSON.stringify(token), (err) => {
-                if (err) return reject(err);
+                if (err) {
+                    console.log('Erro ao salvar o token:', err);
+                    return reject(err);
+                }
                 resolve(oAuth2Client);
             });
         });
@@ -53,6 +66,7 @@ app.post('/getCaptadores', async (req, res) => {
         const data = await getCaptadores();
         res.json(data);
     } catch (error) {
+        console.error('Erro ao obter captadores:', error);
         res.status(500).send(error.message);
     }
 });
