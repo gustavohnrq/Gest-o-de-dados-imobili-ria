@@ -51,7 +51,7 @@ function showGerenteForm() {
 }
 
 function showEstoqueForm() {
-    const html = HtmlService.createHtmlOutputFromFile('Form_Estoque')
+    window.location.href = 'Form_Estoque.html'
         .setWidth(1280)
         .setHeight(720);
     SpreadsheetApp.getUi().showModalDialog(html, 'Registrar Estoque');
