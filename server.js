@@ -40,27 +40,30 @@ function getAccessToken(oAuth2Client, resolve, reject) {
         scope: ['https://www.googleapis.com/auth/spreadsheets'],
     });
     console.log('Authorize this app by visiting this url:', authUrl);
-}
-
-// Rota para receber o código de autorização
-app.get('/oauth2callback', (req, res) => {
-    const code = req.query.code;
-    if (!code) {
-        return res.status(400).send('Código de autorização ausente');
-    }
-    oAuth2Client.getToken(code, (err, token) => {
-        if (err) {
-            return res.status(400).send('Erro ao obter token de acesso');
+    // Este código substitui a leitura manual do código
+    app.get('/oauth2callback', (req, res) => {
+        const code = req.query.code;
+        if (!code) {
+            return res.status(400).send('Código de autorização ausente');
         }
-        oAuth2Client.setCredentials(token);
-        fs.writeFile('token.json', JSON.stringify(token), (err) => {
+        oAuth2Client.getToken(code, (err, token) => {
             if (err) {
-                return res.status(500).send('Erro ao salvar token');
+                console.error('Erro ao obter token de acesso:', err);
+                return res.status(400).send('Erro ao obter token de acesso');
             }
-            res.send('Autorização bem-sucedida. Você pode fechar esta janela.');
+            oAuth2Client.setCredentials(token);
+            fs.writeFile('token.json', JSON.stringify(token), (err) => {
+                if (err) {
+                    console.error('Erro ao salvar token:', err);
+                    return res.status(500).send('Erro ao salvar token');
+                }
+                console.log('Token salvo com sucesso');
+                resolve(oAuth2Client);
+                res.send('Autorização bem-sucedida. Você pode fechar esta janela.');
+            });
         });
     });
-});
+}
 
 // Funções de API
 app.post('/getCaptadores', async (req, res) => {
