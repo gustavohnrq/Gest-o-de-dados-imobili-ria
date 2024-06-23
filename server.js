@@ -12,7 +12,7 @@ app.use(express.json());
 // Carregar credenciais do Google API das variáveis de ambiente
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URI = process.env.REDIRECT_URI;
+const REDIRECT_URI = process.env.REDIRECT_URI || 'https://gestao-de-dados-imobiliaria.vercel.app/oauth2callback';
 
 if (!CLIENT_ID || !CLIENT_SECRET || !REDIRECT_URI) {
     console.error('Erro: CLIENT_ID, CLIENT_SECRET, e REDIRECT_URI precisam estar definidos.');
@@ -40,30 +40,30 @@ function getAccessToken(oAuth2Client, resolve, reject) {
         scope: ['https://www.googleapis.com/auth/spreadsheets'],
     });
     console.log('Authorize this app by visiting this url:', authUrl);
-    // Este código substitui a leitura manual do código
-    app.get('/oauth2callback', (req, res) => {
-        const code = req.query.code;
-        if (!code) {
-            return res.status(400).send('Código de autorização ausente');
+}
+
+// Rota para lidar com o callback do OAuth2
+app.get('/oauth2callback', (req, res) => {
+    const code = req.query.code;
+    if (!code) {
+        return res.status(400).send('Código de autorização ausente');
+    }
+    oAuth2Client.getToken(code, (err, token) => {
+        if (err) {
+            console.error('Erro ao obter token de acesso:', err);
+            return res.status(400).send('Erro ao obter token de acesso');
         }
-        oAuth2Client.getToken(code, (err, token) => {
+        oAuth2Client.setCredentials(token);
+        fs.writeFile('token.json', JSON.stringify(token), (err) => {
             if (err) {
-                console.error('Erro ao obter token de acesso:', err);
-                return res.status(400).send('Erro ao obter token de acesso');
+                console.error('Erro ao salvar token:', err);
+                return res.status(500).send('Erro ao salvar token');
             }
-            oAuth2Client.setCredentials(token);
-            fs.writeFile('token.json', JSON.stringify(token), (err) => {
-                if (err) {
-                    console.error('Erro ao salvar token:', err);
-                    return res.status(500).send('Erro ao salvar token');
-                }
-                console.log('Token salvo com sucesso');
-                resolve(oAuth2Client);
-                res.send('Autorização bem-sucedida. Você pode fechar esta janela.');
-            });
+            console.log('Token salvo com sucesso');
+            res.send('Autorização bem-sucedida. Você pode fechar esta janela.');
         });
     });
-}
+});
 
 // Funções de API
 app.post('/getCaptadores', async (req, res) => {
