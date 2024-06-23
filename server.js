@@ -13,6 +13,12 @@ app.use(express.json());
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
+
+if (!CLIENT_ID || !CLIENT_SECRET || !REDIRECT_URI) {
+    console.error('Erro: CLIENT_ID, CLIENT_SECRET, e REDIRECT_URI precisam estar definidos.');
+    process.exit(1);
+}
+
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 
 // Função para autenticar o cliente OAuth
