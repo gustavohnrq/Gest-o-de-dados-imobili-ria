@@ -214,6 +214,31 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'MenuPrincipal.html'));
 });
 
+// Rota para lidar com o callback do OAuth2
+app.get('/oauth2callback', (req, res) => {
+    const code = req.query.code;
+    if (!code) {
+        return res.status(400).send('Código de autorização ausente');
+    }
+    oAuth2Client.getToken(code, (err, token) => {
+        if (err) {
+            console.error('Erro ao obter token de acesso:', err);
+            return res.status(400).send('Erro ao obter token de acesso');
+        }
+        oAuth2Client.setCredentials(token);
+        // Certificar que o diretório existe
+        const tokenPath = path.join(__dirname, 'token.json');
+        fs.writeFile(tokenPath, JSON.stringify(token), (err) => {
+            if (err) {
+                console.error('Erro ao salvar token:', err);
+                return res.status(500).send('Erro ao salvar token');
+            }
+            console.log('Token salvo com sucesso em:', tokenPath);
+            res.send('Autorização bem-sucedida. Você pode fechar esta janela.');
+        });
+    });
+});
+
 // Inicia o servidor
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
